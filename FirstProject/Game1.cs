@@ -12,12 +12,13 @@ namespace FirstProject
         BasicEffect effect;
         Texture2D chessBoardTexture;
         Vector3 cameraPosition = new Vector3(2, 30, 30);
+        Model robotModel;
+        Vector3 modelPosition;
         Robot robot;
+        Camera camera;
 
         // This is the model instance that we'll load
         // our XNB into:
-        Model robotModel;
-        Vector3 modelPosition;
 
         public Game1()
         {
@@ -49,6 +50,8 @@ namespace FirstProject
 
             robot = new Robot();
             robot.Initialize(Content);
+
+            camera = new Camera(graphics.GraphicsDevice);
             // We’ll be assigning texture values later
             base.Initialize();
         }
@@ -68,6 +71,8 @@ namespace FirstProject
 
         protected override void Update(GameTime gameTime)
         {
+            robot.Update(gameTime);
+            camera.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -76,23 +81,9 @@ namespace FirstProject
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             DrawGround();
-
-
-            // A model is composed of "Meshes" which are
-            // parts of the model which can be positioned
-            // independently, which can use different textures,
-            // and which can have different rendering states
-            // such as lighting applied.
-
             float aspectRatio =
                 graphics.PreferredBackBufferWidth / (float)graphics.PreferredBackBufferHeight;
-            robot.Draw(cameraPosition, aspectRatio);
-            //DrawModel(robotModel, new Vector3(-4, 0, 3));
-            //DrawModel(robotModel, new Vector3(0, 0, 3));
-            //DrawModel(robotModel, new Vector3(4, 0, 3));
-            //DrawModel(robotModel, new Vector3(-4, 4, 3));
-            //DrawModel(robotModel, new Vector3(0, 4, 3));
-            //DrawModel(robotModel, new Vector3(4, 4, 3));
+            robot.Draw(camera);
 
             base.Draw(gameTime);
         }
@@ -158,20 +149,9 @@ namespace FirstProject
         private void DrawGround()
         {
             //var cameraPosition = new Vector3(0, 40, 20);
-            var cameraLookAtVector = Vector3.Zero;
-            var cameraUpVector = Vector3.UnitZ;
+            effect.View = camera.ViewMatrix;
 
-            effect.View = Matrix.CreateLookAt(
-            cameraPosition, cameraLookAtVector, cameraUpVector);
-
-            float aspectRatio =
-            graphics.PreferredBackBufferWidth / (float)graphics.PreferredBackBufferHeight;
-            float fieldOfView = Microsoft.Xna.Framework.MathHelper.PiOver4;
-            float nearClipPlane = 1;
-            float farClipPlane = 200;
-
-            effect.Projection = Matrix.CreatePerspectiveFieldOfView(
-            fieldOfView, aspectRatio, nearClipPlane, farClipPlane);
+            effect.Projection = camera.ProjectionMatrix;
 
             effect.TextureEnabled = true;
             effect.Texture = chessBoardTexture;
@@ -181,15 +161,8 @@ namespace FirstProject
                 pass.Apply();
 
                 graphics.GraphicsDevice.DrawUserPrimitives(
-                // We’ll be rendering two trinalges
-                            PrimitiveType.TriangleList,
-                // The array of verts that we want to render
-                            floorVerts,
-                // The offset, which is 0 since we want to start 
-                // at the beginning of the floorVerts array
-                            0,
-                // The number of triangles to draw
-                            2);
+                    PrimitiveType.TriangleList,
+                    floorVerts, 0, 2);
             }
         }
     }

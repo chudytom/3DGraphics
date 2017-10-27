@@ -11,13 +11,19 @@ namespace FirstProject
 {
     public class Robot
     {
-        Model model;
+        private Model model;
+        float angle;
         public void Initialize(ContentManager contentManager)
         {
             model = contentManager.Load<Model>("robot");
         }
 
-        public void Draw(Vector3 cameraPosition, float aspectRatio)
+        public void Update(GameTime gameTime)
+        {
+            angle += (float)gameTime.ElapsedGameTime.TotalSeconds;
+        }
+
+        public void Draw(Camera camera)
         {
             foreach (var mesh in model.Meshes)
             {
@@ -25,23 +31,24 @@ namespace FirstProject
                 {
                     effect.EnableDefaultLighting();
                     effect.PreferPerPixelLighting = true;
+                    effect.World = GetWorldMatrix();
 
-                    effect.World = Matrix.Identity;
-                    var cameraLookAtVector = Vector3.Zero;
-                    var cameraUpVector = Vector3.UnitZ;
-
-                    effect.View = Matrix.CreateLookAt(
-                    cameraPosition, cameraLookAtVector, cameraUpVector);
-
-                    float fieldOfView = Microsoft.Xna.Framework.MathHelper.PiOver4;
-                    float nearClipPlane = 1;
-                    float farClipPlane = 200;
-
-                    effect.Projection = Matrix.CreatePerspectiveFieldOfView(
-                    fieldOfView, aspectRatio, nearClipPlane, farClipPlane);
+                    effect.View = camera.ViewMatrix;
+                    effect.Projection = camera.ProjectionMatrix;
                 }
                 mesh.Draw();
             }
+        }
+
+        private Matrix GetWorldMatrix()
+        {
+            const float circleRadius = 8;
+            const float heightOffGround = 3;
+
+            Matrix translationMatrix = Matrix.CreateTranslation(circleRadius, 0, heightOffGround);
+            Matrix rotationMatrix = Matrix.CreateRotationZ(angle);
+            Matrix combinedMatrix = translationMatrix * rotationMatrix;
+            return combinedMatrix;
         }
     }
 }
