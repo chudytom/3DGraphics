@@ -18,7 +18,8 @@ namespace FirstProject
         Vector3 position = new Vector3(0, 20, 10);
         float cameraSpeed = 3;
 
-        float angle;
+        float angleAroundZ;
+        float angleAroundX;
 
         public Camera(GraphicsDevice graphicsDevice)
         {
@@ -34,7 +35,7 @@ namespace FirstProject
             get
             {
                 var lookAtVector = new Vector3(0, -1, -0.5f);
-                var rotationMatrix = Matrix.CreateRotationZ(angle);
+                var rotationMatrix = GetRotationMatrix();
 
                 lookAtVector = Vector3.Transform(lookAtVector, rotationMatrix);
                 lookAtVector += position;
@@ -70,13 +71,17 @@ namespace FirstProject
             {
 
                 if (state.IsKeyDown(Keys.Q))
-                    angle += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    angleAroundZ += (float)gameTime.ElapsedGameTime.TotalSeconds;
                 if (state.IsKeyDown(Keys.E))
-                    angle -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    angleAroundZ -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (state.IsKeyDown(Keys.F))
+                    angleAroundX += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (state.IsKeyDown(Keys.R))
+                    angleAroundX -= (float)gameTime.ElapsedGameTime.TotalSeconds;
                 else
                 {
                     var forwardVector = new Vector3(0, 0, 0);
-                    var rotationMatrix = Matrix.CreateRotationZ(angle);
+                    Matrix rotationMatrix = GetRotationMatrix();
                     if (state.IsKeyDown(Keys.Up))
                         forwardVector = new Vector3(0, -1, 0);
                     else if (state.IsKeyDown(Keys.Down))
@@ -85,6 +90,10 @@ namespace FirstProject
                         forwardVector = new Vector3(1, 0, 0);
                     else if (state.IsKeyDown(Keys.Right))
                         forwardVector = new Vector3(-1, 0, 0);
+                    else if (state.IsKeyDown(Keys.W))
+                        forwardVector = new Vector3(0, 0, 1);
+                    else if (state.IsKeyDown(Keys.S))
+                        forwardVector = new Vector3(0, 0, -1);
                     forwardVector = Vector3.Transform(forwardVector, rotationMatrix);
 
                     this.position += forwardVector * cameraSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -93,6 +102,13 @@ namespace FirstProject
 
             // We'll be doing some input-based movement here
         }
+
+        private Matrix GetRotationMatrix()
+        {
+            var rotationMatrixZ = Matrix.CreateRotationZ(angleAroundZ);
+            var rotationMatrixX = Matrix.CreateRotationX(angleAroundX);
+            return Matrix.CreateFromYawPitchRoll(0, angleAroundX, angleAroundZ);
+        }
 
         public void SetCameraSpeed(float cameraSpeed)
         {

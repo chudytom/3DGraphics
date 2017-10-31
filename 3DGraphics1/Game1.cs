@@ -13,7 +13,7 @@ namespace FirstProject
         Texture2D chessBoardTexture;
         Vector3 cameraPosition = new Vector3(2, 30, 30);
         Model robotModel;
-        Vector3 modelPosition;
+        Vector3 robotModelPosition;
         Robot robot;
         Camera camera;
 
@@ -66,7 +66,7 @@ namespace FirstProject
             {
                 chessBoardTexture = Texture2D.FromStream(this.GraphicsDevice, stream);
             }
-                modelPosition = new Vector3(0, 0, 3);
+                robotModelPosition = new Vector3(0, 0, 3);
         }
 
         protected override void Update(GameTime gameTime)
