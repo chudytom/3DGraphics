@@ -15,38 +15,61 @@ namespace FirstProject
         // in the ProjectionMatrix property.
         GraphicsDevice graphicsDevice;
 
-        Vector3 position = new Vector3(0, 20, 20);
-        float cameraSpeed = 3;
+        Vector3 cameraPosition = new Vector3(0, 0, 20);
+        Vector3 frontVector = new Vector3(0, 0, 1);
+        Vector3 upVector = new Vector3(0, 1, 0);
+        float cameraSpeed = 2.0f;
 
         float angleAroundZ;
         float angleAroundX;
 
+        Vector3 lookAtVector;
+
+        //public Matrix View { get; private set; }
+
         public Camera(GraphicsDevice graphicsDevice)
         {
             this.graphicsDevice = graphicsDevice;
+            lookAtVector = new Vector3(0, -1, -1f);
+            //var lookAtVector = new Vector3(0, 0, 0);
+            var rotationMatrix = GetRotationMatrix();
+            //rotationMatrix = Matrix.Identity;
+
+            lookAtVector = Vector3.Transform(lookAtVector, rotationMatrix);
+            lookAtVector += cameraPosition;
+            //lookAtVector = position;
+
+            var upVector = Vector3.UnitZ;
+
+            viewMatrix = Matrix.CreateLookAt(
+            cameraPosition, lookAtVector, upVector);
         }
 
         public Camera(GraphicsDevice graphicsDevice, float cameraSpeed) : this(graphicsDevice)
         {
             this.cameraSpeed = cameraSpeed;
         }
+        public Matrix ViewMa { get; private set; }
+        private Matrix viewMatrix;
         public Matrix ViewMatrix
         {
             get
             {
-                var lookAtVector = new Vector3(0, -1, -0.5f);
-                //var lookAtVector = new Vector3(0, 0, 0);
-                var rotationMatrix = GetRotationMatrix();
-                //rotationMatrix = Matrix.Identity;
+                //var lookAtVector = new Vector3(0, -1, -1f);
+                ////var lookAtVector = new Vector3(0, 0, 0);
+                //var rotationMatrix = GetRotationMatrix();
+                ////rotationMatrix = Matrix.Identity;
 
-                lookAtVector = Vector3.Transform(lookAtVector, rotationMatrix);
-                lookAtVector += position;
+                //lookAtVector = Vector3.Transform(lookAtVector, rotationMatrix);
+                //lookAtVector += cameraPosition;
 
-                var upVector = Vector3.UnitZ;
+                //var upVector = Vector3.UnitZ;
 
-                return Matrix.CreateLookAt(
-                position, lookAtVector, upVector);
+                //return Matrix.CreateLookAt(
+                //cameraPosition, lookAtVector, upVector);
+                return viewMatrix;
             }
+            private set { viewMatrix = value; }
         }
 
         public Matrix ProjectionMatrix
@@ -68,42 +91,63 @@ namespace FirstProject
         {
             KeyboardState state = Keyboard.GetState();
 
+            float speed = (float)(cameraSpeed * gameTime.ElapsedGameTime.TotalSeconds);
+
             var pressedKeys = state.GetPressedKeys();
-            if(pressedKeys.Length>0)
+            if (pressedKeys.Length > 0)
             {
-
-                if (state.IsKeyDown(Keys.Q))
-                    angleAroundZ += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                if (state.IsKeyDown(Keys.E))
-                    angleAroundZ -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-                if (state.IsKeyDown(Keys.F))
-                    angleAroundX += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                if (state.IsKeyDown(Keys.R))
-                    angleAroundX -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-                else
+                //Linear moves
+                if (state.IsKeyDown(Keys.Up))
+                    cameraPosition -= frontVector * cameraSpeed / 20;
+                if (state.IsKeyDown(Keys.Down))
+                    cameraPosition += frontVector * cameraSpeed/20;
+                if (state.IsKeyDown(Keys.Left))
                 {
-                    var forwardVector = new Vector3(0, 0, 0);
-                    Matrix rotationMatrix = GetRotationMatrix();
-                    if (state.IsKeyDown(Keys.Up))
-                        forwardVector = new Vector3(0, -1, 0);
-                    else if (state.IsKeyDown(Keys.Down))
-                        forwardVector = new Vector3(0, 1, 0);
-                    else if (state.IsKeyDown(Keys.Left))
-                        forwardVector = new Vector3(1, 0, 0);
-                    else if (state.IsKeyDown(Keys.Right))
-                        forwardVector = new Vector3(-1, 0, 0);
-                    else if (state.IsKeyDown(Keys.W))
-                        forwardVector = new Vector3(0, 0, 1);
-                    else if (state.IsKeyDown(Keys.S))
-                        forwardVector = new Vector3(0, 0, -1);
-                    forwardVector = Vector3.Transform(forwardVector, rotationMatrix);
-
-                    this.position += forwardVector * cameraSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    var moveDirection = Vector3.Cross(frontVector, upVector);
+                    moveDirection.Normalize();
+                    cameraPosition += moveDirection * speed;
                 }
-            }
+                if (state.IsKeyDown(Keys.Right))
+                {
+                    var moveDirection = Vector3.Cross(upVector, frontVector);
+                    moveDirection.Normalize();
+                    cameraPosition += moveDirection * speed;
+                }
+                if (state.IsKeyDown(Keys.W))
+                {
+                    cameraPosition += upVector * speed;
+                }
+                if (state.IsKeyDown(Keys.S))
+                {
+                    cameraPosition -= upVector * speed;
+                }
+                //Rotations
+                if (state.IsKeyDown(Keys.Q))
+                {
+                    frontVector = Vector3.Transform(frontVector, Matrix.CreateFromAxisAngle(upVector, MathHelper.ToRadians(cameraSpeed)));
+                    //frontVector.Normalize();
+                }
+                if (state.IsKeyDown(Keys.E))
+                {
+                    frontVector = Vector3.Transform(frontVector, Matrix.CreateFromAxisAngle(upVector, MathHelper.ToRadians(-cameraSpeed)));
+                }
+                if (state.IsKeyDown(Keys.R))
+                {
+                    var rotationAxis = Vector3.Cross(frontVector, upVector);
+                    upVector = Vector3.Transform(upVector, Matrix.CreateFromAxisAngle(rotationAxis, MathHelper.ToRadians(-cameraSpeed)));
+                    frontVector = Vector3.Transform(frontVector, Matrix.CreateFromAxisAngle(rotationAxis, MathHelper.ToRadians(-cameraSpeed)));
+                }
+                if (state.IsKeyDown(Keys.F))
+                {
+                    var rotationAxis = Vector3.Cross(frontVector, upVector);
+                    upVector = Vector3.Transform(upVector, Matrix.CreateFromAxisAngle(rotationAxis, MathHelper.ToRadians(cameraSpeed)));
+                    frontVector = Vector3.Transform(frontVector, Matrix.CreateFromAxisAngle(rotationAxis, MathHelper.ToRadians(cameraSpeed)));
+                }
 
-            // We'll be doing some input-based movement here
-        }
+            }
+            ViewMatrix = Matrix.CreateLookAt(cameraPosition, cameraPosition - frontVector, upVector);
+
+        }
 
         private Matrix GetRotationMatrix()
         {

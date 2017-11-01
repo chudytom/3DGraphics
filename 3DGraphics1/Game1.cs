@@ -21,7 +21,7 @@ namespace FirstProject
         List<Palm> palms = new List<Palm>();
         float palmPositionAngle = 10;
         float sphereRadius = 5;
-        float oceanSize = 40.0f;
+        float oceanSize = 140.0f;
         Robot robot;
         //Model palmModel;
 
