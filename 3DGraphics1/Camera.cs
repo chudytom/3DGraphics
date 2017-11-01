@@ -15,7 +15,7 @@ namespace FirstProject
         // in the ProjectionMatrix property.
         GraphicsDevice graphicsDevice;
 
-        Vector3 position = new Vector3(0, 20, 10);
+        Vector3 position = new Vector3(0, 20, 20);
         float cameraSpeed = 3;
 
         float angleAroundZ;

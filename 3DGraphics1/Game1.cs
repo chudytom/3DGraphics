@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -9,17 +10,20 @@ namespace FirstProject
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
-        VertexPositionTexture[] floorVerts;
         BasicEffect effect;
         Texture2D chessBoardTexture;
         Vector3 cameraPosition = new Vector3(2, 30, 30);
         Model robotModel;
         Vector3 robotModelPosition;
-        Robot robot;
         Camera camera;
-
-        // This is the model instance that we'll load
-        // our XNB into:
+        Ocean ocean;
+        Sphere sphere;
+        List<Palm> palms = new List<Palm>();
+        float palmPositionAngle = 10;
+        float sphereRadius = 5;
+        float oceanSize = 40.0f;
+        //Robot robot;
+        //Model palmModel;
 
         public Game1()
         {
@@ -31,129 +35,69 @@ namespace FirstProject
 
         protected override void Initialize()
         {
-            floorVerts = new VertexPositionTexture[6];
-            floorVerts[0].Position = new Vector3(-20, -20, 0);
-            floorVerts[1].Position = new Vector3(-20, 20, 0);
-            floorVerts[2].Position = new Vector3(20, -20, 0);
-            floorVerts[3].Position = floorVerts[1].Position;
-            floorVerts[4].Position = new Vector3(20, 20, 0);
-            floorVerts[5].Position = floorVerts[2].Position;
-
-            float repetitions = 20.0f;
-            //floorVerts[0].TextureCoordinate = new Vector2(0, 0);
-            //floorVerts[1].TextureCoordinate = new Vector2(0, repetitions);
-            //floorVerts[2].TextureCoordinate = new Vector2(repetitions, 0);
-            //floorVerts[3].TextureCoordinate = floorVerts[1].TextureCoordinate;
-            //floorVerts[4].TextureCoordinate = new Vector2(repetitions, repetitions);
-            //floorVerts[5].TextureCoordinate = floorVerts[2].TextureCoordinate;
 
             effect = new BasicEffect(graphics.GraphicsDevice);
-
-            robot = new Robot();
-            robot.Initialize(Content);
-
             camera = new Camera(graphics.GraphicsDevice);
+
+            ocean = new Ocean(oceanSize);
+            sphere = new Sphere(GraphicsDevice, radius: sphereRadius, latitudes: 30, longitudes: 30, color: Color.Yellow);
+            float palmHeight = (float)(sphereRadius * Math.Cos(MathHelper.ToRadians(palmPositionAngle)));
+            float palmSideTranslation = (float)(sphereRadius * Math.Sin(MathHelper.ToRadians(palmPositionAngle)));
+            palms.Add(new Palm(new Vector3(palmSideTranslation, 0, palmHeight)));
+            palms.Add(new Palm(new Vector3(-palmSideTranslation, 0, palmHeight)));
+            foreach (var palm in palms)
+            {
+                palm.Initialize(Content);
+            }
+            //robot = new Robot();
+            //robot.Initialize(Content);
             // We’ll be assigning texture values later
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            // Notice that loading a model is very similar
-            // to loading any other XNB (like a Texture2D).
-            // The only difference is the generic type.
             robotModel = Content.Load<Model>("robot");
+            //palmModel = Content.Load<Model>("Palm1");
             using (var stream = TitleContainer.OpenStream("Content/chessboard.png"))
             {
                 chessBoardTexture = Texture2D.FromStream(this.GraphicsDevice, stream);
             }
-                robotModelPosition = new Vector3(0, 0, 3);
-
-            
+            using (var stream = TitleContainer.OpenStream("Content/Ocean.jpg"))
+            {
+                ocean.SetTexture(Texture2D.FromStream(this.GraphicsDevice, stream));
+            }
+            robotModelPosition = new Vector3(0, 0, 3);
+            sphere.SetTexture(chessBoardTexture);
         }
 
         protected override void Update(GameTime gameTime)
         {
-            robot.Update(gameTime);
+            //robot.Update(gameTime);
             camera.Update(gameTime);
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.LightSkyBlue);
 
-            //DrawUsetPrimitives(floorVerts);
-            //DrawUsetPrimitives(GenerateSphere(30, 20, 20));
-            //float aspectRatio =
-            //    graphics.PreferredBackBufferWidth / (float)graphics.PreferredBackBufferHeight;
-            robot.Draw(camera);
-
-            var sphere = new Sphere(GraphicsDevice, radius: 5, longitudes:20, latitudes:20, color:Color.LightGoldenrodYellow);
+            DrawGround(ocean.OceanVerts, ocean.OceanTexture);
             sphere.Draw(camera);
+            foreach (var palm in palms)
+            {
+                palm.Draw(camera);
+            }
 
+            //robot.Draw(camera);
+            //DrawModel(palmModel, new Vector3());
+            //DrawUsetPrimitives(GenerateSphere(30, 20, 20));
             base.Draw(gameTime);
         }
 
 
-        private void DrawModel(Model model, Vector3 modelPosition)
-        {
-            foreach (var mesh in model.Meshes)
-            {
-                // "Effect" refers to a shader. Each mesh may
-                // have multiple shaders applied to it for more
-                // advanced visuals. 
-                foreach (BasicEffect effect in mesh.Effects)
-                {
-                    // We could set up custom lights, but this
-                    // is the quickest way to get somethign on screen:
-                    effect.EnableDefaultLighting();
-                    // This makes lighting look more realistic on
-                    // round surfaces, but at a slight performance cost:
-                    effect.PreferPerPixelLighting = true;
 
-                    // The world matrix can be used to position, rotate
-                    // or resize (scale) the model. Identity means that
-                    // the model is unrotated, drawn at the origin, and
-                    // its size is unchanged from the loaded content file.
-                    effect.World = Matrix.CreateTranslation(modelPosition);
-
-                    // Move the camera 8 units away from the origin:
-                    //var cameraPosition = new Vector3(0, 10, 0);
-                    // Tell the camera to look at the origin:
-                    var cameraLookAtVector = Vector3.Zero;
-                    // Tell the camera that positive Z is up
-                    var cameraUpVector = Vector3.UnitZ;
-
-                    effect.View = Matrix.CreateLookAt(
-                    cameraPosition, cameraLookAtVector, cameraUpVector);
-
-                    // We want the aspect ratio of our display to match
-                    // the entire screen's aspect ratio:
-                    float aspectRatio =
-                    graphics.PreferredBackBufferWidth / (float)graphics.PreferredBackBufferHeight;
-                    // Field of view measures how wide of a view our camera has.
-                    // Increasing this value means it has a wider view, making everything
-                    // on screen smaller. This is conceptually the same as "zooming out".
-                    // It also 
-                    float fieldOfView = Microsoft.Xna.Framework.MathHelper.PiOver4;
-                    // Anything closer than this will not be drawn (will be clipped)
-                    float nearClipPlane = 1;
-                    // Anything further than this will not be drawn (will be clipped)
-                    float farClipPlane = 200;
-
-                    effect.Projection = Matrix.CreatePerspectiveFieldOfView(
-                    fieldOfView, aspectRatio, nearClipPlane, farClipPlane);
-
-                }
-
-                // Now that we've assigned our properties on the effects we can
-                // draw the entire mesh
-                mesh.Draw();
-            }
-        }
-
-        private void DrawUsetPrimitives(VertexPositionTexture[] vertexData)
+        private void DrawGround(VertexPositionTexture[] vertexData, Texture2D texture)
         {
             //var cameraPosition = new Vector3(0, 40, 20);
             effect.View = camera.ViewMatrix;
@@ -161,7 +105,7 @@ namespace FirstProject
             effect.Projection = camera.ProjectionMatrix;
 
             effect.TextureEnabled = true;
-            effect.Texture = chessBoardTexture;
+            effect.Texture = texture;
 
             foreach (var pass in effect.CurrentTechnique.Passes)
             {
@@ -172,6 +116,46 @@ namespace FirstProject
                     vertexData, 0, 2);
             }
         }
+        
+        //private void DrawModel(Model model, Vector3 modelPosition)
+        //{
+        //    foreach (var mesh in model.Meshes)
+        //    {
+        //        // "Effect" refers to a shader. Each mesh may
+        //        // have multiple shaders applied to it for more
+        //        // advanced visuals. 
+        //        foreach (BasicEffect effect in mesh.Effects)
+        //        {
+        //            // We could set up custom lights, but this
+        //            // is the quickest way to get somethign on screen:
+        //            effect.EnableDefaultLighting();
+        //            // This makes lighting look more realistic on
+        //            // round surfaces, but at a slight performance cost:
+        //            effect.PreferPerPixelLighting = true;
+
+        //            // The world matrix can be used to position, rotate
+        //            // or resize (scale) the model. Identity means that
+        //            // the model is unrotated, drawn at the origin, and
+        //            // its size is unchanged from the loaded content file.
+        //            effect.World = Matrix.CreateScale(0.3f) * Matrix.CreateRotationX(MathHelper.PiOver2) * Matrix.CreateTranslation(modelPosition) ;
+
+        //            // Move the camera 8 units away from the origin:
+        //            //var cameraPosition = new Vector3(0, 10, 0);
+        //            // Tell the camera to look at the origin:
+        //            var cameraLookAtVector = Vector3.Zero;
+        //            // Tell the camera that positive Z is up
+        //            var cameraUpVector = Vector3.UnitZ;
+
+        //            effect.Projection = camera.ProjectionMatrix;
+        //            effect.View = camera.ViewMatrix;
+
+        //        }
+
+        //        // Now that we've assigned our properties on the effects we can
+        //        // draw the entire mesh
+        //        mesh.Draw();
+        //    }
+        //}
 
         static VertexPositionTexture[] GenerateSphere(float radius, int latitudes, int longitudes)
         {
