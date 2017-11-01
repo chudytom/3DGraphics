@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -39,12 +40,12 @@ namespace FirstProject
             floorVerts[5].Position = floorVerts[2].Position;
 
             float repetitions = 20.0f;
-            floorVerts[0].TextureCoordinate = new Vector2(0, 0);
-            floorVerts[1].TextureCoordinate = new Vector2(0, repetitions);
-            floorVerts[2].TextureCoordinate = new Vector2(repetitions, 0);
-            floorVerts[3].TextureCoordinate = floorVerts[1].TextureCoordinate;
-            floorVerts[4].TextureCoordinate = new Vector2(repetitions, repetitions);
-            floorVerts[5].TextureCoordinate = floorVerts[2].TextureCoordinate;
+            //floorVerts[0].TextureCoordinate = new Vector2(0, 0);
+            //floorVerts[1].TextureCoordinate = new Vector2(0, repetitions);
+            //floorVerts[2].TextureCoordinate = new Vector2(repetitions, 0);
+            //floorVerts[3].TextureCoordinate = floorVerts[1].TextureCoordinate;
+            //floorVerts[4].TextureCoordinate = new Vector2(repetitions, repetitions);
+            //floorVerts[5].TextureCoordinate = floorVerts[2].TextureCoordinate;
 
             effect = new BasicEffect(graphics.GraphicsDevice);
 
@@ -67,6 +68,8 @@ namespace FirstProject
                 chessBoardTexture = Texture2D.FromStream(this.GraphicsDevice, stream);
             }
                 robotModelPosition = new Vector3(0, 0, 3);
+
+            
         }
 
         protected override void Update(GameTime gameTime)
@@ -80,10 +83,14 @@ namespace FirstProject
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            DrawGround();
-            float aspectRatio =
-                graphics.PreferredBackBufferWidth / (float)graphics.PreferredBackBufferHeight;
+            //DrawUsetPrimitives(floorVerts);
+            //DrawUsetPrimitives(GenerateSphere(30, 20, 20));
+            //float aspectRatio =
+            //    graphics.PreferredBackBufferWidth / (float)graphics.PreferredBackBufferHeight;
             robot.Draw(camera);
+
+            var sphere = new Sphere(GraphicsDevice, radius: 5, longitudes:20, latitudes:20, color:Color.LightGoldenrodYellow);
+            sphere.Draw(camera);
 
             base.Draw(gameTime);
         }
@@ -146,7 +153,7 @@ namespace FirstProject
             }
         }
 
-        private void DrawGround()
+        private void DrawUsetPrimitives(VertexPositionTexture[] vertexData)
         {
             //var cameraPosition = new Vector3(0, 40, 20);
             effect.View = camera.ViewMatrix;
@@ -162,8 +169,48 @@ namespace FirstProject
 
                 graphics.GraphicsDevice.DrawUserPrimitives(
                     PrimitiveType.TriangleList,
-                    floorVerts, 0, 2);
+                    vertexData, 0, 2);
             }
+        }
+
+        static VertexPositionTexture[] GenerateSphere(float radius, int latitudes, int longitudes)
+        {
+            float latitude_increment = 360.0f / latitudes;
+            float longitude_increment = 180.0f / longitudes;
+            // if this causes an error, consider changing the size to [(latitude + 1)*(longitudes + 1)], but this should work.
+            VertexPositionTexture[] vertices = new VertexPositionTexture[latitudes * longitudes];
+
+            int counter = 0;
+
+            for (float u = 0; u < 360.0f; u += latitude_increment)
+            {
+                for (float t = 0; t < 180.0f; t += longitude_increment)
+                {
+                    
+                    float rad = radius;
+
+                    float x = (float)(rad * Math.Sin(MathHelper.ToRadians(t)) * Math.Sin(MathHelper.ToRadians(u)));
+                    float y = (float)(rad * Math.Cos(MathHelper.ToRadians(t)));
+                    float z = (float)(rad * Math.Sin(MathHelper.ToRadians(t)) * Math.Cos(MathHelper.ToRadians(u)));
+
+                    //var vertexPositionTexture = new VertexPositionTexture();
+                    vertices[counter].Position = new Vector3(x + 1, y + 2, z);
+                    //vertices[counter].TextureCoordinate.X = x;
+                    //vertices[counter].TextureCoordinate.Y = y;
+                    //vertices[counter++] = vertexPositionTexture;
+                    counter++;
+                }
+            }
+            //vertices = new VertexPositionTexture[6];
+            //vertices[0].Position = new Vector3(-20, -20, 0);
+            //vertices[1].Position = new Vector3(-20, 20, 0);
+            //vertices[2].Position = new Vector3(20, -20, 0);
+            //vertices[3].Position = vertices[1].Position;
+            //vertices[4].Position = new Vector3(20, 20, 0);
+            //vertices[5].Position = vertices[2].Position;
+
+            return vertices;
+
         }
     }
     /// <summary>
