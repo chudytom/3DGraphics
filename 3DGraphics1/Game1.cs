@@ -22,7 +22,7 @@ namespace FirstProject
         float palmPositionAngle = 10;
         float sphereRadius = 5;
         float oceanSize = 40.0f;
-        //Robot robot;
+        Robot robot;
         //Model palmModel;
 
         public Game1()
@@ -49,8 +49,8 @@ namespace FirstProject
             {
                 palm.Initialize(Content);
             }
-            //robot = new Robot();
-            //robot.Initialize(Content);
+            robot = new Robot();
+            robot.Initialize(Content);
             // We’ll be assigning texture values later
             base.Initialize();
         }
@@ -73,7 +73,7 @@ namespace FirstProject
 
         protected override void Update(GameTime gameTime)
         {
-            //robot.Update(gameTime);
+            robot.Update(gameTime);
             camera.Update(gameTime);
             base.Update(gameTime);
         }
@@ -89,7 +89,7 @@ namespace FirstProject
                 palm.Draw(camera);
             }
 
-            //robot.Draw(camera);
+            robot.Draw(camera);
             //DrawModel(palmModel, new Vector3());
             //DrawUsetPrimitives(GenerateSphere(30, 20, 20));
             base.Draw(gameTime);

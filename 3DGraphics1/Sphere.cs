@@ -38,7 +38,7 @@ namespace FirstProject
             effect.SpecularPower = 5;
             //effect.vie
             effect.PreferPerPixelLighting = true;
-            effect.EnableDefaultLighting();
+            //effect.EnableDefaultLighting();
         }
         void Createspherevertices()
         {
@@ -94,7 +94,7 @@ namespace FirstProject
             effect.DiffuseColor = new Vector3(1, 0, 1);
             effect.Projection = cam.ProjectionMatrix;
             effect.World = Matrix.CreateRotationX(MathHelper.PiOver2);
-            effect.Texture = texture;
+            //effect.Texture = texture;
             graphicd.RasterizerState = new RasterizerState() { FillMode = FillMode.Solid }; // Wireframe as in the picture
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {

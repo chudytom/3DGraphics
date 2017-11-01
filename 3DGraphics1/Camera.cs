@@ -35,7 +35,9 @@ namespace FirstProject
             get
             {
                 var lookAtVector = new Vector3(0, -1, -0.5f);
+                //var lookAtVector = new Vector3(0, 0, 0);
                 var rotationMatrix = GetRotationMatrix();
+                //rotationMatrix = Matrix.Identity;
 
                 lookAtVector = Vector3.Transform(lookAtVector, rotationMatrix);
                 lookAtVector += position;
