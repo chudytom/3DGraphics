@@ -96,7 +96,28 @@ namespace FirstProject
         public void Draw(Camera cam) // the camera class contains the View and Projection Matrices
         {
             effect.View = cam.ViewMatrix;
-            effect.DiffuseColor = new Vector3(sphereColor.R, sphereColor.G, sphereColor.B);
+            effect.LightingEnabled = true;
+            effect.DirectionalLight0.Enabled = true;
+            effect.DirectionalLight1.Enabled = true;
+            effect.DirectionalLight2.Enabled = true;
+            if (light.Count > 0)
+            {
+                effect.DirectionalLight0.DiffuseColor = light[0].DiffuseColor;
+                effect.DirectionalLight0.Direction = light[0].Direction;
+                effect.DirectionalLight0.SpecularColor = light[0].SpecularColor;
+            }
+            if (light.Count > 1)
+            {
+                effect.DirectionalLight1.DiffuseColor = light[1].DiffuseColor;
+                effect.DirectionalLight1.Direction = light[1].Direction;
+                effect.DirectionalLight1.SpecularColor = light[1].SpecularColor;
+            }
+            if (light.Count > 2)
+            {
+                effect.DirectionalLight2.DiffuseColor = light[2].DiffuseColor;
+                effect.DirectionalLight2.Direction = light[2].Direction;
+                effect.DirectionalLight2.SpecularColor = light[2].SpecularColor;
+            }
             effect.Projection = cam.ProjectionMatrix;
             effect.World = Matrix.CreateRotationX(MathHelper.PiOver2);
             effect.EnableDefaultLighting();
