@@ -38,13 +38,13 @@ namespace FirstProject
                     effect.DirectionalLight2.Enabled = true;
                     effect.DirectionalLight0.DiffuseColor = new Vector3(0.5f, 0.0f, 0);
                     effect.DirectionalLight0.Direction = new Vector3(1, 0, 0);
-                    //effect.DirectionalLight0.SpecularColor = new Vector3(0, 1, 0);
+                    effect.DirectionalLight0.SpecularColor = new Vector3(0, 1, 0);
                     effect.DirectionalLight1.DiffuseColor = new Vector3(0, 0.5f, 0);
                     effect.DirectionalLight1.Direction = new Vector3(-1, 0, 0);
-                    //effect.DirectionalLight1.SpecularColor = new Vector3(1, 0, 0);
+                    effect.DirectionalLight1.SpecularColor = new Vector3(1, 0, 0);
                     effect.DirectionalLight2.DiffuseColor = new Vector3(0.02f, 0.02f, 1);
                     effect.DirectionalLight2.Direction = new Vector3(0, 0, -1);
-                    //effect.DirectionalLight2.SpecularColor = new Vector3(0, 0, 1);
+                    effect.DirectionalLight2.SpecularColor = new Vector3(0, 0, 1);
                     //effect.EnableDefaultLighting();
                     effect.World = GetWorldMatrix();
 
