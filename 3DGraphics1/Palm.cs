@@ -14,9 +14,11 @@ namespace FirstProject
         private Model model;
         Vector3 modelPosition;
         public Color Color { get; set; }
-        public Palm(Vector3 modelPosition)
+        List<DirLight> light = new List<DirLight>();
+        public Palm(Vector3 modelPosition, List<DirLight> light)
         {
             this.modelPosition = modelPosition;
+            this.light = light;
         }
         public void Initialize(ContentManager contentManager)
         {
@@ -36,15 +38,24 @@ namespace FirstProject
                     effect.DirectionalLight0.Enabled = true;
                     effect.DirectionalLight1.Enabled = true;
                     effect.DirectionalLight2.Enabled = true;
-                    effect.DirectionalLight0.DiffuseColor = new Vector3(0.5f, 0.0f, 0);
-                    effect.DirectionalLight0.Direction = new Vector3(1, 0, 0);
-                    effect.DirectionalLight0.SpecularColor = new Vector3(0, 1, 0);
-                    effect.DirectionalLight1.DiffuseColor = new Vector3(0, 0.5f, 0);
-                    effect.DirectionalLight1.Direction = new Vector3(-1, 0, 0);
-                    effect.DirectionalLight1.SpecularColor = new Vector3(1, 0, 0);
-                    effect.DirectionalLight2.DiffuseColor = new Vector3(0.02f, 0.02f, 1);
-                    effect.DirectionalLight2.Direction = new Vector3(0, 0, -1);
-                    effect.DirectionalLight2.SpecularColor = new Vector3(0, 0, 1);
+                    if(light.Count>0)
+                    {
+                        effect.DirectionalLight0.DiffuseColor = light[0].DiffuseColor;
+                        effect.DirectionalLight0.Direction = light[0].Direction;
+                        effect.DirectionalLight0.SpecularColor = light[0].SpecularColor;
+                    }
+                    if(light.Count>1)
+                    {
+                        effect.DirectionalLight1.DiffuseColor = light[1].DiffuseColor;
+                        effect.DirectionalLight1.Direction = light[1].Direction;
+                        effect.DirectionalLight1.SpecularColor = light[1].SpecularColor;
+                    }
+                    if(light.Count>2)
+                    {
+                        effect.DirectionalLight2.DiffuseColor = light[2].DiffuseColor;
+                        effect.DirectionalLight2.Direction = light[2].Direction;
+                        effect.DirectionalLight2.SpecularColor = light[2].SpecularColor;
+                    }
                     //effect.EnableDefaultLighting();
                     effect.World = GetWorldMatrix();
 

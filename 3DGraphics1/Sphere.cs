@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -6,7 +7,7 @@ namespace FirstProject
 {
     public class Sphere
     {
-        VertexPositionColor[] vertices; //later, I will provide another example with VertexPositionNormalTexture
+        VertexNormalVector[] vertices; //later, I will provide another example with VertexPositionNormalTexture
         VertexBuffer vbuffer;
         short[] indices; //my laptop can only afford Reach, no HiDef :(
         IndexBuffer ibuffer;
@@ -16,10 +17,13 @@ namespace FirstProject
         GraphicsDevice graphicd;
         int latitudes = 15; //how many vertices in a circle
         int longitudes = 15; //how many circles
+        Vector3 spherePosition;
         Color sphereColor;
         Texture2D texture;
-        public Sphere(GraphicsDevice graphics, float radius, int latitudes, int longitudes, Color color)
+        List<DirLight> light;
+        public Sphere(GraphicsDevice graphics, float radius, int latitudes, int longitudes, Color color, List<DirLight> light)
         {
+            this.light = light;
             graphicd = graphics;
             this.radius = radius;
             this.latitudes = latitudes;
@@ -32,17 +36,18 @@ namespace FirstProject
             ibuffer = new IndexBuffer(graphics, IndexElementSize.SixteenBits, nindices, BufferUsage.WriteOnly);
             Createspherevertices();
             Createindices();
-            vbuffer.SetData<VertexPositionColor>(vertices);
+            vbuffer.SetData<VertexNormalVector>(vertices);
             ibuffer.SetData<short>(indices);
             effect.VertexColorEnabled = true;
             effect.SpecularPower = 5;
+            spherePosition = new Vector3(0, 0, 0);
             //effect.vie
             effect.PreferPerPixelLighting = true;
             //effect.EnableDefaultLighting();
         }
         void Createspherevertices()
         {
-            vertices = new VertexPositionColor[nvertices];
+            vertices = new VertexNormalVector[nvertices];
             Vector3 center = new Vector3(0, 0, 0);
             Vector3 rad = new Vector3((float)Math.Abs(radius), 0, 0);
             for (int x = 0; x < longitudes; x++) //number of veritces in a circle, difference between each is 360/longitudes degrees
@@ -55,7 +60,7 @@ namespace FirstProject
                     Matrix yrot = Matrix.CreateRotationY(MathHelper.ToRadians(x * difx)); 
                     Vector3 point = Vector3.Transform(Vector3.Transform(rad, zrot), yrot);//transformation
 
-                    vertices[x * latitudes + y] = new VertexPositionColor(point, sphereColor);
+                    vertices[x * latitudes + y] = new VertexNormalVector(point, spherePosition - point, sphereColor);
                 }
             }
         }
@@ -94,12 +99,14 @@ namespace FirstProject
             effect.DiffuseColor = new Vector3(sphereColor.R, sphereColor.G, sphereColor.B);
             effect.Projection = cam.ProjectionMatrix;
             effect.World = Matrix.CreateRotationX(MathHelper.PiOver2);
+            effect.EnableDefaultLighting();
+            effect.AmbientLightColor = new Vector3(1);
             //effect.Texture = texture;
             graphicd.RasterizerState = new RasterizerState() { FillMode = FillMode.Solid }; // Wireframe as in the picture
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                graphicd.DrawUserIndexedPrimitives<VertexPositionColor>(PrimitiveType.TriangleList, vertices, 0, nvertices, indices, 0, indices.Length/3);
+                graphicd.DrawUserIndexedPrimitives<VertexNormalVector>(PrimitiveType.TriangleList, vertices, 0, nvertices, indices, 0, indices.Length/3);
                 //graphicd.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.LineStrip, vertices, 0, nvertices -1);
             }
         }

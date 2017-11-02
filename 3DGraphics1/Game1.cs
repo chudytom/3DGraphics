@@ -18,17 +18,38 @@ namespace FirstProject
         Camera camera;
         Ocean ocean;
         Sphere sphere;
+        //Sphere2 sphere2;
         List<Palm> palms = new List<Palm>();
         float palmPositionAngle = 10;
         float sphereRadius = 5;
         float oceanSize = 140.0f;
         Robot robot;
+        DirLight directionalLight;
+        List<DirLight> lights = new List<DirLight>();
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
 
             Content.RootDirectory = "Content";
+            lights.Add(new DirLight()
+            {
+                Direction = new Vector3(0.5f, 0, 0),
+                DiffuseColor = new Vector3(1, 0, 0),
+                SpecularColor = new Vector3(0, 0, 1)
+            });
+            lights.Add(new DirLight()
+            {
+                Direction = new Vector3(0, 0.5f, 0),
+                DiffuseColor = new Vector3(-1, 0, 0),
+                SpecularColor = new Vector3(0, 0, 1)
+            });
+            lights.Add(new DirLight()
+            {
+                Direction = new Vector3(0, 0, -1),
+                DiffuseColor = new Vector3(0.02f, 0.02f, 1),
+                SpecularColor = new Vector3(0, 0, 1)
+            });
         }
 
         protected override void Initialize()
@@ -38,16 +59,17 @@ namespace FirstProject
             camera = new Camera(graphics.GraphicsDevice);
 
             ocean = new Ocean(oceanSize);
-            sphere = new Sphere(GraphicsDevice, radius: sphereRadius, latitudes: 30, longitudes: 30, color: Color.Yellow);
+            sphere = new Sphere(GraphicsDevice, radius: sphereRadius, latitudes: 30, longitudes: 30, color: Color.Yellow, light:lights);
+            //sphere2 = new Sphere2(Content, 0.5f, 180, sphereRadius, GraphicsDevice, new Vector3(0, 0, 0), 0, 0, 0);
             float palmHeight = (float)(sphereRadius * Math.Cos(MathHelper.ToRadians(palmPositionAngle)));
             float palmSideTranslation = (float)(sphereRadius * Math.Sin(MathHelper.ToRadians(palmPositionAngle)));
-            palms.Add(new Palm(new Vector3(palmSideTranslation, 0, palmHeight)) { Color = Color.Green});
-            palms.Add(new Palm(new Vector3(-palmSideTranslation, 0, palmHeight)) { Color = Color.Red });
+            palms.Add(new Palm(new Vector3(palmSideTranslation, 0, palmHeight), lights) { Color = Color.Green });
+            palms.Add(new Palm(new Vector3(-palmSideTranslation, 0, palmHeight), lights) { Color = Color.Red });
             foreach (var palm in palms)
             {
                 palm.Initialize(Content);
             }
-            robot = new Robot();
+            robot = new Robot(lights);
             robot.Initialize(Content);
             base.Initialize();
         }
@@ -55,7 +77,7 @@ namespace FirstProject
         protected override void LoadContent()
         {
             robotModel = Content.Load<Model>("robot");
-            
+
             using (var stream = TitleContainer.OpenStream("Content/chessboard.png"))
             {
                 chessBoardTexture = Texture2D.FromStream(this.GraphicsDevice, stream);
@@ -85,6 +107,7 @@ namespace FirstProject
             {
                 palm.Draw(camera);
             }
+            //sphere2.Draw(camera.ViewMatrix, camera.ProjectionMatrix, new Vector3(0, 0, 0));
             robot.Draw(camera);
             base.Draw(gameTime);
         }
@@ -110,7 +133,7 @@ namespace FirstProject
                     vertexData, 0, 2);
             }
         }
-        
+
         //private void DrawModel(Model model, Vector3 modelPosition)
         //{
         //    foreach (var mesh in model.Meshes)
@@ -164,7 +187,7 @@ namespace FirstProject
             {
                 for (float t = 0; t < 180.0f; t += longitude_increment)
                 {
-                    
+
                     float rad = radius;
 
                     float x = (float)(rad * Math.Sin(MathHelper.ToRadians(t)) * Math.Sin(MathHelper.ToRadians(u)));

@@ -13,6 +13,11 @@ namespace FirstProject
     {
         private Model model;
         float angle;
+        List<DirLight> light;
+        public Robot(List<DirLight> light)
+        {
+            this.light = light;
+        }
         public void Initialize(ContentManager contentManager)
         {
             model = contentManager.Load<Model>("robot");

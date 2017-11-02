@@ -20,7 +20,7 @@ namespace FirstProject
         Vector3 upVector = new Vector3(0, 1, 0.5f);
         float cameraSpeed = 2.0f;
 
-        Vector3 lookAtVector;
+        Vector3 lookAtVector = new Vector3(0, 0, 0);
 
         //public Matrix View { get; private set; }
 
