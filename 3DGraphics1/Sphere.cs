@@ -127,7 +127,8 @@ namespace FirstProject
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                graphicd.DrawUserIndexedPrimitives<VertexNormalVector>(PrimitiveType.TriangleList, vertices, 0, nvertices, indices, 0, indices.Length/3);
+                graphicd.DrawUserPrimitives<VertexNormalVector>(PrimitiveType.TriangleList, vertices, 0, nvertices/3, vertices[0].VertexDeclaration);
+                //graphicd.DrawUserIndexedPrimitives<VertexNormalVector>(PrimitiveType.TriangleList, vertices, 0, nvertices, indices, 0, indices.Length/3, vertices[0].VertexDeclaration);
                 //graphicd.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.LineStrip, vertices, 0, nvertices -1);
             }
         }

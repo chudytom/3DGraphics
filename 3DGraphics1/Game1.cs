@@ -50,6 +50,7 @@ namespace FirstProject
                 DiffuseColor = new Vector3(0.02f, 0.02f, 1),
                 SpecularColor = new Vector3(0, 0, 1)
             });
+
         }
 
         protected override void Initialize()
