@@ -60,7 +60,7 @@ namespace FirstProject
             camera = new Camera(graphics.GraphicsDevice);
 
             ocean = new Ocean(oceanSize);
-            sphere = new Sphere(GraphicsDevice, radius: sphereRadius, latitudes: 30, longitudes: 30, color: Color.Yellow, light:lights);
+            sphere = new Sphere(GraphicsDevice, radius: sphereRadius, latitudes: 30, longitudes: 30, color: Color.Black, light:lights);
             //sphere2 = new Sphere2(Content, 0.5f, 180, sphereRadius, GraphicsDevice, new Vector3(0, 0, 0), 0, 0, 0);
             float palmHeight = (float)(sphereRadius * Math.Cos(MathHelper.ToRadians(palmPositionAngle)));
             float palmSideTranslation = (float)(sphereRadius * Math.Sin(MathHelper.ToRadians(palmPositionAngle)));

@@ -36,6 +36,7 @@ namespace FirstProject
             ibuffer = new IndexBuffer(graphics, IndexElementSize.SixteenBits, nindices, BufferUsage.WriteOnly);
             Createspherevertices();
             Createindices();
+            CalculateNormals();
             vbuffer.SetData<VertexNormalVector>(vertices);
             ibuffer.SetData<short>(indices);
             effect.VertexColorEnabled = true;
@@ -45,6 +46,7 @@ namespace FirstProject
             effect.PreferPerPixelLighting = true;
             //effect.EnableDefaultLighting();
         }
+
         void Createspherevertices()
         {
             vertices = new VertexNormalVector[nvertices];
@@ -59,8 +61,10 @@ namespace FirstProject
                     Matrix zrot = Matrix.CreateRotationZ(MathHelper.ToRadians(y * dify)); 
                     Matrix yrot = Matrix.CreateRotationY(MathHelper.ToRadians(x * difx)); 
                     Vector3 point = Vector3.Transform(Vector3.Transform(rad, zrot), yrot);//transformation
-
-                    vertices[x * latitudes + y] = new VertexNormalVector(point, spherePosition - point, sphereColor);
+                    int vertexNumber = x * latitudes + y;
+                    vertices[vertexNumber] = new VertexNormalVector();
+                    vertices[vertexNumber].Position = point;
+                    vertices[vertexNumber].Color = sphereColor;
                 }
             }
         }
@@ -85,6 +89,24 @@ namespace FirstProject
                     indices[i++] = lowerRight;
                     indices[i++] = upperLeft;
                 }
+            }
+        }
+
+        private void CalculateNormals()
+        {
+            for (int i = 0; i < indices.Length / 3; i++)
+            {
+                int index1 = indices[i * 3];
+                int index2 = indices[i * 3 + 1];
+                int index3 = indices[i * 3 + 2];
+
+                Vector3 side1 = vertices[index1].Position - vertices[index3].Position;
+                Vector3 side2 = vertices[index1].Position - vertices[index2].Position;
+                Vector3 normal = Vector3.Cross(side1, side2);
+
+                vertices[index1].Normal += normal;
+                vertices[index2].Normal += normal;
+                vertices[index3].Normal += normal;
             }
         }
 
@@ -127,8 +149,8 @@ namespace FirstProject
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                graphicd.DrawUserPrimitives<VertexNormalVector>(PrimitiveType.TriangleList, vertices, 0, nvertices/3, vertices[0].VertexDeclaration);
-                //graphicd.DrawUserIndexedPrimitives<VertexNormalVector>(PrimitiveType.TriangleList, vertices, 0, nvertices, indices, 0, indices.Length/3, vertices[0].VertexDeclaration);
+                //graphicd.DrawUserPrimitives<VertexNormalVector>(PrimitiveType.TriangleList, vertices, 0, nvertices/3, vertices[0].VertexDeclaration);
+                graphicd.DrawUserIndexedPrimitives<VertexNormalVector>(PrimitiveType.TriangleList, vertices, 0, nvertices, indices, 0, indices.Length / 3, vertices[0].VertexDeclaration);
                 //graphicd.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.LineStrip, vertices, 0, nvertices -1);
             }
         }
