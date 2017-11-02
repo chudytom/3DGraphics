@@ -91,7 +91,7 @@ namespace FirstProject
         public void Draw(Camera cam) // the camera class contains the View and Projection Matrices
         {
             effect.View = cam.ViewMatrix;
-            effect.DiffuseColor = new Vector3(1, 0, 1);
+            effect.DiffuseColor = new Vector3(sphereColor.R, sphereColor.G, sphereColor.B);
             effect.Projection = cam.ProjectionMatrix;
             effect.World = Matrix.CreateRotationX(MathHelper.PiOver2);
             //effect.Texture = texture;

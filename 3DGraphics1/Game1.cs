@@ -23,12 +23,10 @@ namespace FirstProject
         float sphereRadius = 5;
         float oceanSize = 140.0f;
         Robot robot;
-        //Model palmModel;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
-            //graphics.IsFullScreen = true;
 
             Content.RootDirectory = "Content";
         }
@@ -43,22 +41,21 @@ namespace FirstProject
             sphere = new Sphere(GraphicsDevice, radius: sphereRadius, latitudes: 30, longitudes: 30, color: Color.Yellow);
             float palmHeight = (float)(sphereRadius * Math.Cos(MathHelper.ToRadians(palmPositionAngle)));
             float palmSideTranslation = (float)(sphereRadius * Math.Sin(MathHelper.ToRadians(palmPositionAngle)));
-            palms.Add(new Palm(new Vector3(palmSideTranslation, 0, palmHeight)));
-            palms.Add(new Palm(new Vector3(-palmSideTranslation, 0, palmHeight)));
+            palms.Add(new Palm(new Vector3(palmSideTranslation, 0, palmHeight)) { Color = Color.Green});
+            palms.Add(new Palm(new Vector3(-palmSideTranslation, 0, palmHeight)) { Color = Color.Red });
             foreach (var palm in palms)
             {
                 palm.Initialize(Content);
             }
             robot = new Robot();
             robot.Initialize(Content);
-            // We’ll be assigning texture values later
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
             robotModel = Content.Load<Model>("robot");
-            //palmModel = Content.Load<Model>("Palm1");
+            
             using (var stream = TitleContainer.OpenStream("Content/chessboard.png"))
             {
                 chessBoardTexture = Texture2D.FromStream(this.GraphicsDevice, stream);
@@ -88,10 +85,7 @@ namespace FirstProject
             {
                 palm.Draw(camera);
             }
-
             robot.Draw(camera);
-            //DrawModel(palmModel, new Vector3());
-            //DrawUsetPrimitives(GenerateSphere(30, 20, 20));
             base.Draw(gameTime);
         }
 
