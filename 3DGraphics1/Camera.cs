@@ -15,13 +15,10 @@ namespace FirstProject
         // in the ProjectionMatrix property.
         GraphicsDevice graphicsDevice;
 
-        Vector3 cameraPosition = new Vector3(0, 0, 20);
-        Vector3 frontVector = new Vector3(0, 0, 1);
-        Vector3 upVector = new Vector3(0, 1, 0);
+        Vector3 cameraPosition = new Vector3(0, -10, 20);
+        Vector3 frontVector = new Vector3(0, -0.5f, 1);
+        Vector3 upVector = new Vector3(0, 1, 0.5f);
         float cameraSpeed = 2.0f;
-
-        float angleAroundZ;
-        float angleAroundX;
 
         Vector3 lookAtVector;
 
@@ -30,17 +27,7 @@ namespace FirstProject
         public Camera(GraphicsDevice graphicsDevice)
         {
             this.graphicsDevice = graphicsDevice;
-            lookAtVector = new Vector3(0, -1, -1f);
-            //var lookAtVector = new Vector3(0, 0, 0);
-            var rotationMatrix = GetRotationMatrix();
-            //rotationMatrix = Matrix.Identity;
-
-            lookAtVector = Vector3.Transform(lookAtVector, rotationMatrix);
-            lookAtVector += cameraPosition;
-            //lookAtVector = position;
-
             var upVector = Vector3.UnitZ;
-
             viewMatrix = Matrix.CreateLookAt(
             cameraPosition, lookAtVector, upVector);
         }
@@ -53,22 +40,7 @@ namespace FirstProject
         private Matrix viewMatrix;
         public Matrix ViewMatrix
         {
-            get
-            {
-                //var lookAtVector = new Vector3(0, -1, -1f);
-                ////var lookAtVector = new Vector3(0, 0, 0);
-                //var rotationMatrix = GetRotationMatrix();
-                ////rotationMatrix = Matrix.Identity;
-
-                //lookAtVector = Vector3.Transform(lookAtVector, rotationMatrix);
-                //lookAtVector += cameraPosition;
-
-                //var upVector = Vector3.UnitZ;
-
-                //return Matrix.CreateLookAt(
-                //cameraPosition, lookAtVector, upVector);
-                return viewMatrix;
-            }
+            get => viewMatrix;
             private set { viewMatrix = value; }
         }
 
@@ -147,13 +119,6 @@ namespace FirstProject
             }
             ViewMatrix = Matrix.CreateLookAt(cameraPosition, cameraPosition - frontVector, upVector);
 
-        }
-
-        private Matrix GetRotationMatrix()
-        {
-            var rotationMatrixZ = Matrix.CreateRotationZ(angleAroundZ);
-            var rotationMatrixX = Matrix.CreateRotationX(angleAroundX);
-            return Matrix.CreateFromYawPitchRoll(0, angleAroundX, angleAroundZ);
         }
 
         public void SetCameraSpeed(float cameraSpeed)
