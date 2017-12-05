@@ -13,6 +13,7 @@ namespace FirstProject
     {
         // We need this to calculate the aspectRatio
         // in the ProjectionMatrix property.
+        public GraphicsDevice Graphics => graphicsDevice;
         GraphicsDevice graphicsDevice;
 
         Vector3 cameraPosition = new Vector3(0, -10, 20);

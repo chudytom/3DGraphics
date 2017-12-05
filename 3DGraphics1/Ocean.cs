@@ -13,6 +13,8 @@ namespace FirstProject
         VertexPositionTexture[] oceanVerts;
         float oceanSize = 20;
         Texture2D texture;
+        BasicEffect effect;
+        GraphicsDeviceManager graphics;
 
         public Ocean(float size)
         {
@@ -44,27 +46,34 @@ namespace FirstProject
             this.texture = texture;
         }
 
-        //private void DrawGround(VertexPositionTexture[] vertexData, Texture2D texture)
-        //{
-        //    //var cameraPosition = new Vector3(0, 40, 20);
-        //    effect.View = camera.ViewMatrix;
+        private void DrawGround(VertexPositionTexture[] vertexData, Texture2D texture)
+        {
+            //var cameraPosition = new Vector3(0, 40, 20);
 
-        //    effect.Projection = camera.ProjectionMatrix;
-
-        //    effect.TextureEnabled = true;
-        //    effect.Texture = texture;
-
-        //    foreach (var pass in effect.CurrentTechnique.Passes)
-        //    {
-        //        pass.Apply();
-
-        //        graphics.GraphicsDevice.DrawUserPrimitives(
-        //            PrimitiveType.TriangleList,
-        //            vertexData, 0, 2);
-        //    }
-        //}
+        }
 
         public VertexPositionTexture[] OceanVerts { get => oceanVerts; }
         public Texture2D OceanTexture { get => texture; }
+
+        internal void Draw(Camera camera)
+        {
+            var graphics = camera.Graphics;
+            var effect = new BasicEffect(graphics);
+            effect.View = camera.ViewMatrix;
+
+            effect.Projection = camera.ProjectionMatrix;
+
+            effect.TextureEnabled = true;
+            effect.Texture = texture;
+
+            foreach (var pass in effect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+
+                graphics.DrawUserPrimitives(
+                    PrimitiveType.TriangleList,
+                    OceanVerts, 0, 2);
+            }
+        }
     }
 }

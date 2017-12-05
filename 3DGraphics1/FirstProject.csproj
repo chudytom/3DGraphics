@@ -44,6 +44,7 @@
     <Compile Include="Camera.cs" />
     <Compile Include="DirLight.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="LightsManager.cs" />
     <Compile Include="Ocean.cs" />
     <Compile Include="Palm.cs" />
     <Compile Include="Program.cs" />
