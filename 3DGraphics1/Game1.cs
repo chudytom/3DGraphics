@@ -36,31 +36,30 @@ namespace FirstProject
             {
                 Direction = new Vector3(0.5f, 0, 0),
                 DiffuseColor = new Vector3(1, 0, 0),
-                SpecularColor = new Vector3(0, 0, 1)
+                SpecularColor = new Vector3(0, 1, 0)
             });
             lights.Add(new DirLight()
             {
                 Direction = new Vector3(0, 0.5f, 0),
-                DiffuseColor = new Vector3(-1, 0, 0),
+                DiffuseColor = new Vector3(0, 1, 0),
                 SpecularColor = new Vector3(0, 0, 1)
             });
             lights.Add(new DirLight()
             {
                 Direction = new Vector3(0, 0, -1),
-                DiffuseColor = new Vector3(0.02f, 0.02f, 1),
-                SpecularColor = new Vector3(0, 0, 1)
+                DiffuseColor = new Vector3(0, 0, 1),
+                SpecularColor = new Vector3(1, 0, 0)
             });
 
         }
 
         protected override void Initialize()
         {
-
             effect = new BasicEffect(graphics.GraphicsDevice);
             camera = new Camera(graphics.GraphicsDevice);
 
             ocean = new Ocean(oceanSize);
-            sphere = new Sphere(GraphicsDevice, radius: sphereRadius, latitudes: 30, longitudes: 30, color: Color.Black, light:lights);
+            sphere = new Sphere(GraphicsDevice, sphereRadius, latitudes: 30, longitudes: 30, color: Color.Red, light:lights);
             //sphere2 = new Sphere2(Content, 0.5f, 180, sphereRadius, GraphicsDevice, new Vector3(0, 0, 0), 0, 0, 0);
             float palmHeight = (float)(sphereRadius * Math.Cos(MathHelper.ToRadians(palmPositionAngle)));
             float palmSideTranslation = (float)(sphereRadius * Math.Sin(MathHelper.ToRadians(palmPositionAngle)));
@@ -215,112 +214,4 @@ namespace FirstProject
 
         }
     }
-    /// <summary>
-    /// This is the main type for your game.
-    /// </summary>
-    //public class Game1 : Game
-    //{
-    //    GraphicsDeviceManager graphics;
-    //    SpriteBatch spriteBatch;
-    //    private Model palmModel1;
-    //    private Model palmModel2;
-    //    private Matrix world = Matrix.CreateTranslation(new Vector3(0, 0, 0));
-    //    private Matrix view = Matrix.CreateLookAt(new Vector3(0, 0, 10), new Vector3(0, 0, 0), Vector3.UnitY);
-    //    private Matrix projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45), 800f / 480f, 0.1f, 100f);
-    //    private Vector3 position;
-    //    private float angle;
-
-    //    public Game1()
-    //    {
-    //        graphics = new GraphicsDeviceManager(this);
-    //        Content.RootDirectory = "Content";
-    //    }
-
-    //    /// <summary>
-    //    /// Allows the game to perform any initialization it needs to before starting to run.
-    //    /// This is where it can query for any required services and load any non-graphic
-    //    /// related content.  Calling base.Initialize will enumerate through any components
-    //    /// and initialize them as well.
-    //    /// </summary>
-    //    protected override void Initialize()
-    //    {
-    //        // TODO: Add your initialization logic here
-
-    //        base.Initialize();
-    //    }
-
-    //    /// <summary>
-    //    /// LoadContent will be called once per game and is the place to load
-    //    /// all of your content.
-    //    /// </summary>
-    //    protected override void LoadContent()
-    //    {
-    //        // Create a new SpriteBatch, which can be used to draw textures.
-    //        spriteBatch = new SpriteBatch(GraphicsDevice);
-    //        palmModel1 = Content.Load<Model>("MY_PALM");
-    //        palmModel2 = Content.Load<Model>("Palm1");
-    //        position = new Vector3(0, 0, 0);
-    //        angle = 0;
-
-    //        // TODO: use this.Content to load your game content here
-    //    }
-
-    //    /// <summary>
-    //    /// UnloadContent will be called once per game and is the place to unload
-    //    /// game-specific content.
-    //    /// </summary>
-    //    protected override void UnloadContent()
-    //    {
-    //        // TODO: Unload any non ContentManager content here
-    //        Content.Unload();
-    //    }
-
-    //    /// <summary>
-    //    /// Allows the game to run logic such as updating the world,
-    //    /// checking for collisions, gathering input, and playing audio.
-    //    /// </summary>
-    //    /// <param name="gameTime">Provides a snapshot of timing values.</param>
-    //    protected override void Update(GameTime gameTime)
-    //    {
-    //        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-    //            Exit();
-
-    //        position += new Vector3(0, 0.01f, 0);
-    //        angle += 0.03f;
-    //        world = Matrix.CreateRotationY(angle) * Matrix.CreateTranslation(position);
-    //        // TODO: Add your update logic here
-    //        base.Update(gameTime);
-    //    }
-
-    //    /// <summary>
-    //    /// This is called when the game should draw itself.
-    //    /// </summary>
-    //    /// <param name="gameTime">Provides a snapshot of timing values.</param>
-    //    protected override void Draw(GameTime gameTime)
-    //    {
-    //        GraphicsDevice.Clear(Color.CornflowerBlue);
-
-
-    //        DrawModel(palmModel1, world, view, projection);
-    //        DrawModel(palmModel2, world, view, projection);
-    //        // TODO: Add your drawing code here
-
-    //        base.Draw(gameTime);
-    //    }
-
-    //    private void DrawModel(Model model, Matrix world, Matrix view, Matrix projection)
-    //    {
-    //        foreach (ModelMesh mesh in model.Meshes)
-    //        {
-    //            foreach (BasicEffect effect in mesh.Effects)
-    //            {
-    //                effect.World = world;
-    //                effect.View = view;
-    //                effect.Projection = projection;
-    //            }
-
-    //            mesh.Draw();
-    //        }
-    //    }
-    //}
 }

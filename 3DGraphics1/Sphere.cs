@@ -23,6 +23,7 @@ namespace FirstProject
         List<DirLight> light;
         public Sphere(GraphicsDevice graphics, float radius, int latitudes, int longitudes, Color color, List<DirLight> light)
         {
+            
             this.light = light;
             graphicd = graphics;
             this.radius = radius;
@@ -39,11 +40,12 @@ namespace FirstProject
             CalculateNormals();
             vbuffer.SetData<VertexNormalVector>(vertices);
             ibuffer.SetData<short>(indices);
-            effect.VertexColorEnabled = true;
-            effect.SpecularPower = 5;
+            effect.VertexColorEnabled = false;
+            effect.PreferPerPixelLighting = true;
+            //effect.SpecularPower = 5;
             spherePosition = new Vector3(0, 0, 0);
             //effect.vie
-            effect.PreferPerPixelLighting = true;
+            effect.PreferPerPixelLighting = false;
             //effect.EnableDefaultLighting();
         }
 
@@ -55,7 +57,7 @@ namespace FirstProject
             for (int x = 0; x < longitudes; x++) //number of veritces in a circle, difference between each is 360/longitudes degrees
             {
                 float difx = 360.0f / longitudes;
-                for (int y = 0; y < latitudes/1; y++) // number of circles, difference between each is 360/latitudes degrees
+                for (int y = 0; y < latitudes/2; y++) // number of circles, difference between each is 360/latitudes degrees
                 {
                     float dify = 360.0f / latitudes;
                     Matrix zrot = Matrix.CreateRotationZ(MathHelper.ToRadians(y * dify)); 
@@ -74,10 +76,10 @@ namespace FirstProject
             int i = 0;
             for (int x = 0; x < longitudes; x++)
             {
-                for (int y = 0; y < latitudes/1; y++)
+                for (int y = 0; y < latitudes/2; y++)
                 {
                     int s1 = x == longitudes - 1 ? 0 : x + 1;
-                    int s2 = y == latitudes - 1 ? 5 : y + 1;
+                    int s2 = y == latitudes - 1 ? 0 : y + 1;
                     short upperLeft = (short)(x * latitudes + y);
                     short upperRight = (short)(s1 * latitudes + y);
                     short lowerLeft = (short)(x * latitudes + s2);
@@ -117,6 +119,7 @@ namespace FirstProject
 
         public void Draw(Camera cam) // the camera class contains the View and Projection Matrices
         {
+            //effect.TextureEnabled = true;
             effect.View = cam.ViewMatrix;
             effect.LightingEnabled = true;
             effect.DirectionalLight0.Enabled = true;
@@ -142,16 +145,11 @@ namespace FirstProject
             }
             effect.Projection = cam.ProjectionMatrix;
             effect.World = Matrix.CreateRotationX(MathHelper.PiOver2);
-            effect.EnableDefaultLighting();
-            effect.AmbientLightColor = new Vector3(1);
-            //effect.Texture = texture;
             graphicd.RasterizerState = new RasterizerState() { FillMode = FillMode.Solid }; // Wireframe as in the picture
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                //graphicd.DrawUserPrimitives<VertexNormalVector>(PrimitiveType.TriangleList, vertices, 0, nvertices/3, vertices[0].VertexDeclaration);
                 graphicd.DrawUserIndexedPrimitives<VertexNormalVector>(PrimitiveType.TriangleList, vertices, 0, nvertices, indices, 0, indices.Length / 3, vertices[0].VertexDeclaration);
-                //graphicd.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.LineStrip, vertices, 0, nvertices -1);
             }
         }
 

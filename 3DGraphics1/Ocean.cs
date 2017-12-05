@@ -44,6 +44,26 @@ namespace FirstProject
             this.texture = texture;
         }
 
+        //private void DrawGround(VertexPositionTexture[] vertexData, Texture2D texture)
+        //{
+        //    //var cameraPosition = new Vector3(0, 40, 20);
+        //    effect.View = camera.ViewMatrix;
+
+        //    effect.Projection = camera.ProjectionMatrix;
+
+        //    effect.TextureEnabled = true;
+        //    effect.Texture = texture;
+
+        //    foreach (var pass in effect.CurrentTechnique.Passes)
+        //    {
+        //        pass.Apply();
+
+        //        graphics.GraphicsDevice.DrawUserPrimitives(
+        //            PrimitiveType.TriangleList,
+        //            vertexData, 0, 2);
+        //    }
+        //}
+
         public VertexPositionTexture[] OceanVerts { get => oceanVerts; }
         public Texture2D OceanTexture { get => texture; }
     }
