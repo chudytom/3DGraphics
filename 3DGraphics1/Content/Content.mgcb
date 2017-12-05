@@ -51,3 +51,15 @@
 /processorParam:TextureFormat=Compressed
 /build:Palm1.fbx
 
+#begin Shaders/Ambient.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Shaders/Ambient.fx
+
+#begin Shaders/Diffuse.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Shaders/Diffuse.fx
+

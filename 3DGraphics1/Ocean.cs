@@ -13,8 +13,6 @@ namespace FirstProject
         VertexPositionTexture[] oceanVerts;
         float oceanSize = 20;
         Texture2D texture;
-        BasicEffect effect;
-        GraphicsDeviceManager graphics;
 
         public Ocean(float size)
         {
@@ -44,12 +42,6 @@ namespace FirstProject
         public void SetTexture(Texture2D texture)
         {
             this.texture = texture;
-        }
-
-        private void DrawGround(VertexPositionTexture[] vertexData, Texture2D texture)
-        {
-            //var cameraPosition = new Vector3(0, 40, 20);
-
         }
 
         public VertexPositionTexture[] OceanVerts { get => oceanVerts; }

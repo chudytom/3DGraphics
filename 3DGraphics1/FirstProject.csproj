@@ -67,6 +67,8 @@
     <Content Include="Content\chessboard.png" />
     <Content Include="Content\Ocean.jpg" />
     <Content Include="Content\Ocean2.png" />
+    <Content Include="Content\Shaders\Diffuse.fx" />
+    <Content Include="Content\Shaders\Ambient.fx" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -78,6 +80,7 @@
     <None Include="Content\robottexture_0.xnb" />
     <None Include="Content\spaceship.xnb" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

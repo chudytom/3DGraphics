@@ -24,6 +24,7 @@ namespace FirstProject
         float oceanSize = 140.0f;
         Robot robot;
         LightsManager lightsManager;
+        Effect _effect;
 
         public Game1()
         {
@@ -33,21 +34,22 @@ namespace FirstProject
 
         protected override void Initialize()
         {
+            _effect = Content.Load<Effect>("Shaders/Diffuse");
             effect = new BasicEffect(graphics.GraphicsDevice);
             camera = new Camera(graphics.GraphicsDevice);
 
             lightsManager = new LightsManager(prepareLights: true);
             ocean = new Ocean(oceanSize);
-            sphere = new Sphere(GraphicsDevice, sphereRadius, latitudes: 30, longitudes: 30, color: Color.Red, light:lightsManager.Lights);
+            sphere = new Sphere(GraphicsDevice, sphereRadius, latitudes: 30, longitudes: 30, color: Color.Red, effect: _effect);
             float palmZTranslation = (float)(sphereRadius * Math.Cos(MathHelper.ToRadians(palmPositionAngle)));
             float palmSideTranslation = (float)(sphereRadius * Math.Sin(MathHelper.ToRadians(palmPositionAngle)));
-            palms.Add(new Palm(new Vector3(palmSideTranslation, 0, palmZTranslation), lightsManager.Lights) { Color = Color.Green });
-            palms.Add(new Palm(new Vector3(-palmSideTranslation, 0, palmZTranslation), lightsManager.Lights) { Color = Color.Red });
+            palms.Add(new Palm(new Vector3(palmSideTranslation, 0, palmZTranslation), _effect) { Color = Color.Green });
+            palms.Add(new Palm(new Vector3(-palmSideTranslation, 0, palmZTranslation), _effect) { Color = Color.Red });
             foreach (var palm in palms)
             {
                 palm.Initialize(Content);
             }
-            robot = new Robot(lightsManager.Lights);
+            robot = new Robot(_effect);
             robot.Initialize(Content);
             base.Initialize();
         }
