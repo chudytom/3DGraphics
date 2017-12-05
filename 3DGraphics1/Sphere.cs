@@ -123,7 +123,6 @@ namespace FirstProject
         public void Draw(Camera cam) // the camera class contains the View and Projection Matrices
         {
             //effect.TextureEnabled = true;
-
             effect.View = cam.ViewMatrix;
             effect.LightingEnabled = true;
             effect.DirectionalLight0.Enabled = true;
@@ -149,15 +148,10 @@ namespace FirstProject
             }
             effect.Projection = cam.ProjectionMatrix;
             effect.World = Matrix.CreateRotationX(MathHelper.PiOver2);
-            //effect.EnableDefaultLighting();
-            //effect.AmbientLightColor = new Vector3(1);
-            //effect.Texture = texture;qq
-
             graphicd.RasterizerState = new RasterizerState() { FillMode = FillMode.Solid }; // Wireframe as in the picture
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-
                 graphicd.DrawUserIndexedPrimitives<VertexNormalVector>(PrimitiveType.TriangleList, vertices, 0, nvertices, indices, 0, indices.Length / 3, vertices[0].VertexDeclaration);
             }
         }
