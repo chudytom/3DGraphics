@@ -7,7 +7,7 @@ namespace FirstProject
 {
     public class Sphere
     {
-        VertexPositionNormalTexture[] vertices; //later, I will provide another example with VertexPositionNormalTexture
+        VertexNormalVector[] vertices; //later, I will provide another example with VertexPositionNormalTexture
         VertexBuffer vbuffer;
         short[] indices; //my laptop can only afford Reach, no HiDef :(
         IndexBuffer ibuffer;
@@ -37,12 +37,8 @@ namespace FirstProject
             ibuffer = new IndexBuffer(graphics, IndexElementSize.SixteenBits, nindices, BufferUsage.WriteOnly);
             Createspherevertices();
             Createindices();
-<<<<<<< HEAD
-            vbuffer.SetData(vertices);
-=======
             CalculateNormals();
             vbuffer.SetData<VertexNormalVector>(vertices);
->>>>>>> DifferentVertexType
             ibuffer.SetData<short>(indices);
             effect.VertexColorEnabled = false;
             effect.PreferPerPixelLighting = true;
@@ -55,37 +51,24 @@ namespace FirstProject
 
         void Createspherevertices()
         {
-            vertices = new VertexPositionNormalTexture[nvertices];
+            vertices = new VertexNormalVector[nvertices];
             Vector3 center = new Vector3(0, 0, 0);
             Vector3 rad = new Vector3((float)Math.Abs(radius), 0, 0);
             for (int x = 0; x < longitudes; x++) //number of veritces in a circle, difference between each is 360/longitudes degrees
             {
                 float difx = 360.0f / longitudes;
-<<<<<<< HEAD
-                for (int y = 0; y < latitudes / 1; y++) // number of circles, difference between each is 360/latitudes degrees
-=======
+
                 for (int y = 0; y < latitudes/2; y++) // number of circles, difference between each is 360/latitudes degrees
->>>>>>> DifferentVertexType
                 {
                     float dify = 360.0f / latitudes;
                     Matrix zrot = Matrix.CreateRotationZ(MathHelper.ToRadians(y * dify));
                     Matrix yrot = Matrix.CreateRotationY(MathHelper.ToRadians(x * difx));
                     Vector3 point = Vector3.Transform(Vector3.Transform(rad, zrot), yrot);//transformation
-<<<<<<< HEAD
 
-                    vertices[x * latitudes + y] = new VertexPositionNormalTexture();
-                    //vertices[x * latitudes + y] = new VertexPositionNormalTexture(point, spherePosition - point, sphereColor);
-                    int pointNumber = x * latitudes + y;
-                    vertices[pointNumber].Position = point;
-                    vertices[pointNumber].Normal = spherePosition - point;
-                        vertices[pointNumber].TextureCoordinate = new Vector2(vertices[pointNumber].Position.X, vertices[pointNumber].Position.Y);
-                    
-=======
                     int vertexNumber = x * latitudes + y;
                     vertices[vertexNumber] = new VertexNormalVector();
                     vertices[vertexNumber].Position = point;
                     vertices[vertexNumber].Color = sphereColor;
->>>>>>> DifferentVertexType
                 }
             }
         }
@@ -95,11 +78,8 @@ namespace FirstProject
             int i = 0;
             for (int x = 0; x < longitudes; x++)
             {
-<<<<<<< HEAD
-                for (int y = 0; y < latitudes / 1; y++)
-=======
+
                 for (int y = 0; y < latitudes/2; y++)
->>>>>>> DifferentVertexType
                 {
                     int s1 = x == longitudes - 1 ? 0 : x + 1;
                     int s2 = y == latitudes - 1 ? 0 : y + 1;
@@ -142,52 +122,43 @@ namespace FirstProject
 
         public void Draw(Camera cam) // the camera class contains the View and Projection Matrices
         {
-<<<<<<< HEAD
-
-=======
             //effect.TextureEnabled = true;
->>>>>>> DifferentVertexType
+
             effect.View = cam.ViewMatrix;
-            //effect.LightingEnabled = true;
-            //effect.DirectionalLight0.Enabled = true;
-            //effect.DirectionalLight1.Enabled = true;
-            //effect.DirectionalLight2.Enabled = true;
-            //if (light.Count > 0)
-            //{
-            //    effect.DirectionalLight0.DiffuseColor = light[0].DiffuseColor;
-            //    effect.DirectionalLight0.Direction = light[0].Direction;
-            //    effect.DirectionalLight0.SpecularColor = light[0].SpecularColor;
-            //}
-            //if (light.Count > 1)
-            //{
-            //    effect.DirectionalLight1.DiffuseColor = light[1].DiffuseColor;
-            //    effect.DirectionalLight1.Direction = light[1].Direction;
-            //    effect.DirectionalLight1.SpecularColor = light[1].SpecularColor;
-            //}
-            //if (light.Count > 2)
-            //{
-            //    effect.DirectionalLight2.DiffuseColor = light[2].DiffuseColor;
-            //    effect.DirectionalLight2.Direction = light[2].Direction;
-            //    effect.DirectionalLight2.SpecularColor = light[2].SpecularColor;
-            //}
+            effect.LightingEnabled = true;
+            effect.DirectionalLight0.Enabled = true;
+            effect.DirectionalLight1.Enabled = true;
+            effect.DirectionalLight2.Enabled = true;
+            if (light.Count > 0)
+            {
+                effect.DirectionalLight0.DiffuseColor = light[0].DiffuseColor;
+                effect.DirectionalLight0.Direction = light[0].Direction;
+                effect.DirectionalLight0.SpecularColor = light[0].SpecularColor;
+            }
+            if (light.Count > 1)
+            {
+                effect.DirectionalLight1.DiffuseColor = light[1].DiffuseColor;
+                effect.DirectionalLight1.Direction = light[1].Direction;
+                effect.DirectionalLight1.SpecularColor = light[1].SpecularColor;
+            }
+            if (light.Count > 2)
+            {
+                effect.DirectionalLight2.DiffuseColor = light[2].DiffuseColor;
+                effect.DirectionalLight2.Direction = light[2].Direction;
+                effect.DirectionalLight2.SpecularColor = light[2].SpecularColor;
+            }
             effect.Projection = cam.ProjectionMatrix;
             effect.World = Matrix.CreateRotationX(MathHelper.PiOver2);
-<<<<<<< HEAD
             //effect.EnableDefaultLighting();
-            effect.AmbientLightColor = new Vector3(1);
-            //effect.Texture = texture;
-=======
->>>>>>> DifferentVertexType
+            //effect.AmbientLightColor = new Vector3(1);
+            //effect.Texture = texture;qq
+
             graphicd.RasterizerState = new RasterizerState() { FillMode = FillMode.Solid }; // Wireframe as in the picture
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-<<<<<<< HEAD
-                graphicd.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(PrimitiveType.TriangleList, vertices, 0, nvertices, indices, 0, indices.Length / 3);
-                //graphicd.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.LineStrip, vertices, 0, nvertices -1);
-=======
+
                 graphicd.DrawUserIndexedPrimitives<VertexNormalVector>(PrimitiveType.TriangleList, vertices, 0, nvertices, indices, 0, indices.Length / 3, vertices[0].VertexDeclaration);
->>>>>>> DifferentVertexType
             }
         }
 
