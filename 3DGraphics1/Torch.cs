@@ -21,7 +21,6 @@ namespace FirstProject
         public void Initialize(ContentManager contentManager)
         {
             model = contentManager.Load<Model>("Row_Boat");
-
         }
         public void Draw(Camera camera)
         {

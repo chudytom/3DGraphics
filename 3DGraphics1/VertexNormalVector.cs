@@ -19,6 +19,9 @@ namespace FirstProject
             Normal = normal;
             Color = color;
         }
+
+
+
         public static int SizeInBytes = (3 + 3 + 1) * 4; // 3 floats for Position + 3 floats for Normal + 4 bytes for Color
 
         public static VertexElement[] VertexElements = new[]

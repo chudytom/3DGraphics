@@ -23,6 +23,7 @@ namespace FirstProject
         List<DirLight> light;
         public Sphere(GraphicsDevice graphics, float radius, int latitudes, int longitudes, Color color, List<DirLight> light)
         {
+            
             this.light = light;
             graphicd = graphics;
             this.radius = radius;
@@ -36,15 +37,22 @@ namespace FirstProject
             ibuffer = new IndexBuffer(graphics, IndexElementSize.SixteenBits, nindices, BufferUsage.WriteOnly);
             Createspherevertices();
             Createindices();
+<<<<<<< HEAD
             vbuffer.SetData(vertices);
+=======
+            CalculateNormals();
+            vbuffer.SetData<VertexNormalVector>(vertices);
+>>>>>>> DifferentVertexType
             ibuffer.SetData<short>(indices);
-            effect.VertexColorEnabled = true;
-            effect.SpecularPower = 5;
+            effect.VertexColorEnabled = false;
+            effect.PreferPerPixelLighting = true;
+            //effect.SpecularPower = 5;
             spherePosition = new Vector3(0, 0, 0);
             //effect.vie
-            effect.PreferPerPixelLighting = true;
+            effect.PreferPerPixelLighting = false;
             //effect.EnableDefaultLighting();
         }
+
         void Createspherevertices()
         {
             vertices = new VertexPositionNormalTexture[nvertices];
@@ -53,12 +61,17 @@ namespace FirstProject
             for (int x = 0; x < longitudes; x++) //number of veritces in a circle, difference between each is 360/longitudes degrees
             {
                 float difx = 360.0f / longitudes;
+<<<<<<< HEAD
                 for (int y = 0; y < latitudes / 1; y++) // number of circles, difference between each is 360/latitudes degrees
+=======
+                for (int y = 0; y < latitudes/2; y++) // number of circles, difference between each is 360/latitudes degrees
+>>>>>>> DifferentVertexType
                 {
                     float dify = 360.0f / latitudes;
                     Matrix zrot = Matrix.CreateRotationZ(MathHelper.ToRadians(y * dify));
                     Matrix yrot = Matrix.CreateRotationY(MathHelper.ToRadians(x * difx));
                     Vector3 point = Vector3.Transform(Vector3.Transform(rad, zrot), yrot);//transformation
+<<<<<<< HEAD
 
                     vertices[x * latitudes + y] = new VertexPositionNormalTexture();
                     //vertices[x * latitudes + y] = new VertexPositionNormalTexture(point, spherePosition - point, sphereColor);
@@ -67,6 +80,12 @@ namespace FirstProject
                     vertices[pointNumber].Normal = spherePosition - point;
                         vertices[pointNumber].TextureCoordinate = new Vector2(vertices[pointNumber].Position.X, vertices[pointNumber].Position.Y);
                     
+=======
+                    int vertexNumber = x * latitudes + y;
+                    vertices[vertexNumber] = new VertexNormalVector();
+                    vertices[vertexNumber].Position = point;
+                    vertices[vertexNumber].Color = sphereColor;
+>>>>>>> DifferentVertexType
                 }
             }
         }
@@ -76,10 +95,14 @@ namespace FirstProject
             int i = 0;
             for (int x = 0; x < longitudes; x++)
             {
+<<<<<<< HEAD
                 for (int y = 0; y < latitudes / 1; y++)
+=======
+                for (int y = 0; y < latitudes/2; y++)
+>>>>>>> DifferentVertexType
                 {
                     int s1 = x == longitudes - 1 ? 0 : x + 1;
-                    int s2 = y == latitudes - 1 ? 5 : y + 1;
+                    int s2 = y == latitudes - 1 ? 0 : y + 1;
                     short upperLeft = (short)(x * latitudes + y);
                     short upperRight = (short)(s1 * latitudes + y);
                     short lowerLeft = (short)(x * latitudes + s2);
@@ -94,6 +117,24 @@ namespace FirstProject
             }
         }
 
+        private void CalculateNormals()
+        {
+            for (int i = 0; i < indices.Length / 3; i++)
+            {
+                int index1 = indices[i * 3];
+                int index2 = indices[i * 3 + 1];
+                int index3 = indices[i * 3 + 2];
+
+                Vector3 side1 = vertices[index1].Position - vertices[index3].Position;
+                Vector3 side2 = vertices[index1].Position - vertices[index2].Position;
+                Vector3 normal = Vector3.Cross(side1, side2);
+
+                vertices[index1].Normal += normal;
+                vertices[index2].Normal += normal;
+                vertices[index3].Normal += normal;
+            }
+        }
+
         public void SetTexture(Texture2D texture)
         {
             this.texture = texture;
@@ -101,7 +142,11 @@ namespace FirstProject
 
         public void Draw(Camera cam) // the camera class contains the View and Projection Matrices
         {
+<<<<<<< HEAD
 
+=======
+            //effect.TextureEnabled = true;
+>>>>>>> DifferentVertexType
             effect.View = cam.ViewMatrix;
             //effect.LightingEnabled = true;
             //effect.DirectionalLight0.Enabled = true;
@@ -127,15 +172,22 @@ namespace FirstProject
             //}
             effect.Projection = cam.ProjectionMatrix;
             effect.World = Matrix.CreateRotationX(MathHelper.PiOver2);
+<<<<<<< HEAD
             //effect.EnableDefaultLighting();
             effect.AmbientLightColor = new Vector3(1);
             //effect.Texture = texture;
+=======
+>>>>>>> DifferentVertexType
             graphicd.RasterizerState = new RasterizerState() { FillMode = FillMode.Solid }; // Wireframe as in the picture
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
+<<<<<<< HEAD
                 graphicd.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(PrimitiveType.TriangleList, vertices, 0, nvertices, indices, 0, indices.Length / 3);
                 //graphicd.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.LineStrip, vertices, 0, nvertices -1);
+=======
+                graphicd.DrawUserIndexedPrimitives<VertexNormalVector>(PrimitiveType.TriangleList, vertices, 0, nvertices, indices, 0, indices.Length / 3, vertices[0].VertexDeclaration);
+>>>>>>> DifferentVertexType
             }
         }
 

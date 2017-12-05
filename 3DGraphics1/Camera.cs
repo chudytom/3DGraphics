@@ -77,31 +77,32 @@ namespace FirstProject
                 {
                     var moveDirection = Vector3.Cross(frontVector, upVector);
                     moveDirection.Normalize();
-                    cameraPosition += moveDirection * speed;
+                    cameraPosition += moveDirection * speed * 5;
                 }
                 if (state.IsKeyDown(Keys.Right))
                 {
                     var moveDirection = Vector3.Cross(upVector, frontVector);
                     moveDirection.Normalize();
-                    cameraPosition += moveDirection * speed;
+                    cameraPosition += moveDirection * speed * 5;
                 }
                 if (state.IsKeyDown(Keys.W))
                 {
-                    cameraPosition += upVector * speed;
+                    cameraPosition += upVector * speed * 5;
                 }
                 if (state.IsKeyDown(Keys.S))
                 {
-                    cameraPosition -= upVector * speed;
+                    cameraPosition -= upVector * speed * 5;
                 }
                 //Rotations
                 if (state.IsKeyDown(Keys.Q))
                 {
                     frontVector = Vector3.Transform(frontVector, Matrix.CreateFromAxisAngle(upVector, MathHelper.ToRadians(cameraSpeed)));
-                    //frontVector.Normalize();
+                    frontVector.Normalize();
                 }
                 if (state.IsKeyDown(Keys.E))
                 {
                     frontVector = Vector3.Transform(frontVector, Matrix.CreateFromAxisAngle(upVector, MathHelper.ToRadians(-cameraSpeed)));
+                    frontVector.Normalize();
                 }
                 if (state.IsKeyDown(Keys.R))
                 {

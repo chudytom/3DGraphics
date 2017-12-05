@@ -42,7 +42,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Camera.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="DirLight.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Ocean.cs" />
