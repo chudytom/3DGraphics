@@ -22,12 +22,15 @@ namespace FirstProject
         protected virtual void PrepareEffect(Camera camera)
         {
             _effect.Parameters["World"].SetValue(GetWorldMatrix());
+            //_effect.Parameters["View"].SetValue(new Matrix(new Vector4(), new Vector4(), new Vector4(), new Vector4()));
             _effect.Parameters["View"].SetValue(camera.ViewMatrix);
+            _effect.Parameters["CameraPosition"].SetValue(camera.Position);
             _effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
             Matrix worldInverseTransposeMatrix = Matrix.Transpose(Matrix.Invert(GetWorldMatrix()));
             _effect.Parameters["WorldInverseTranspose"].SetValue(worldInverseTransposeMatrix);
             _effect.Parameters["AmbientColor"].SetValue(Color.Green.ToVector4());
             _effect.Parameters["AmbientIntensity"].SetValue(0.5f);
+            _effect.Parameters["DiffuseIntensity"].SetValue(0.0f);
         }
 
         public virtual void Draw(Camera camera)

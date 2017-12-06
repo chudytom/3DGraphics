@@ -17,6 +17,7 @@ namespace FirstProject
         GraphicsDevice graphicsDevice;
 
         Vector3 cameraPosition = new Vector3(0, -10, 20);
+        public Vector3 Position => cameraPosition;
         Vector3 frontVector = new Vector3(0, -0.5f, 1);
         Vector3 upVector = new Vector3(0, 1, 0.5f);
         float cameraSpeed = 2.0f;
@@ -37,7 +38,7 @@ namespace FirstProject
         {
             this.cameraSpeed = cameraSpeed;
         }
-        public Matrix ViewMa { get; private set; }
+
         private Matrix viewMatrix;
         public Matrix ViewMatrix
         {
@@ -58,6 +59,7 @@ namespace FirstProject
                 fieldOfView, aspectRatio, nearClipPlane, farClipPlane);
             }
         }
+
 
 
         public void Update(GameTime gameTime)

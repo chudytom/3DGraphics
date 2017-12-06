@@ -34,7 +34,7 @@ namespace FirstProject
 
         protected override void Initialize()
         {
-            _effect = Content.Load<Effect>("Shaders/Diffuse");
+            _effect = Content.Load<Effect>("Shaders/Specular");
             effect = new BasicEffect(graphics.GraphicsDevice);
             camera = new Camera(graphics.GraphicsDevice);
 

@@ -67,6 +67,7 @@
     <Content Include="Content\chessboard.png" />
     <Content Include="Content\Ocean.jpg" />
     <Content Include="Content\Ocean2.png" />
+    <Content Include="Content\Shaders\Specular.fx" />
     <Content Include="Content\Shaders\Diffuse.fx" />
     <Content Include="Content\Shaders\Ambient.fx" />
     <Content Include="Icon.ico" />
