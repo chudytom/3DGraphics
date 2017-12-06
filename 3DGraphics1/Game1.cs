@@ -16,7 +16,7 @@ namespace FirstProject
         Model robotModel;
         Vector3 robotModelPosition;
         Camera camera;
-        Ocean ocean;
+        BasicOcean ocean;
         Sphere sphere;
         List<Palm> palms = new List<Palm>();
         float palmPositionAngle = 10;
@@ -25,6 +25,7 @@ namespace FirstProject
         Robot robot;
         LightsManager lightsManager;
         Effect _effect;
+        private Skybox skybox;
 
         public Game1()
         {
@@ -37,9 +38,10 @@ namespace FirstProject
             _effect = Content.Load<Effect>("Shaders/Specular");
             effect = new BasicEffect(graphics.GraphicsDevice);
             camera = new Camera(graphics.GraphicsDevice);
+            skybox = new Skybox(Content);
 
             lightsManager = new LightsManager(prepareLights: true);
-            ocean = new Ocean(oceanSize);
+            ocean = new BasicOcean(oceanSize);
             sphere = new Sphere(GraphicsDevice, sphereRadius, latitudes: 30, longitudes: 30, color: Color.Red, effect: _effect);
             float palmZTranslation = (float)(sphereRadius * Math.Cos(MathHelper.ToRadians(palmPositionAngle)));
             float palmSideTranslation = (float)(sphereRadius * Math.Sin(MathHelper.ToRadians(palmPositionAngle)));
@@ -80,14 +82,19 @@ namespace FirstProject
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.LightSkyBlue);
-            ocean.Draw(camera);
+            //ocean.Draw(camera);
             sphere.Draw(camera);
             foreach (var palm in palms)
             {
                 palm.Draw(camera);
             }
             robot.Draw(camera);
+
             base.Draw(gameTime);
+            //graphics.GraphicsDevice.RasterizerState.CullMode = CullMode.CullCounterClockwiseFace;
+            graphics.GraphicsDevice.RasterizerState = new RasterizerState() { CullMode = CullMode.CullClockwiseFace };
+            skybox.Draw(camera);
+            graphics.GraphicsDevice.RasterizerState = new RasterizerState() { CullMode = CullMode.CullCounterClockwiseFace };
         }
     }
 }

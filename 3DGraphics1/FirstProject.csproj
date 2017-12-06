@@ -48,6 +48,7 @@
     <Compile Include="Models\ModelBase.cs" />
     <Compile Include="Models\Ocean.cs" />
     <Compile Include="Models\Palm.cs" />
+    <Compile Include="Models\Skybox.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\Robot.cs" />
@@ -67,9 +68,13 @@
     <Content Include="Content\chessboard.png" />
     <Content Include="Content\Ocean.jpg" />
     <Content Include="Content\Ocean2.png" />
+    <Content Include="Content\Shaders\SkyboxShader.fx" />
     <Content Include="Content\Shaders\Specular.fx" />
     <Content Include="Content\Shaders\Diffuse.fx" />
     <Content Include="Content\Shaders\Ambient.fx" />
+    <Content Include="Content\Skyboxes\Islands.dds" />
+    <Content Include="Content\Skyboxes\Skybox.dds" />
+    <Content Include="Content\Skyboxes\Sunset.dds" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -79,6 +84,7 @@
     <None Include="Content\grass.xnb" />
     <None Include="Content\robot.xnb" />
     <None Include="Content\robottexture_0.xnb" />
+    <None Include="Content\Skyboxes\cube.fbx" />
     <None Include="Content\spaceship.xnb" />
   </ItemGroup>
   <ItemGroup />
