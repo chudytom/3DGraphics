@@ -26,10 +26,12 @@ namespace FirstProject
         private Effect _specularEffect;
         private Effect _textureEffect;
         private Effect _oceanEffect;
+        //private Effect _reflectionEffect;
         private Skybox skybox;
         private PrimitiveOcean _primitiveOcean;
         private Ocean _ocean;
         private Texture2D _oceanTexture2;
+        private ReflectionSphere _reflectionSphere;
 
         public Game1()
         {
@@ -42,9 +44,11 @@ namespace FirstProject
             _specularEffect = Content.Load<Effect>("Shaders/Specular");
             _textureEffect = Content.Load<Effect>("Shaders/Texture");
             _oceanEffect = Content.Load<Effect>("Shaders/NewOceanShader");
+            //_reflectionEffect = Content.Load<Effect>("Shaders")
             _camera = new Camera(graphics.GraphicsDevice);
             skybox = new Skybox(Content);
             _primitiveOcean = new PrimitiveOcean(graphics.GraphicsDevice, _camera, Content);
+            _reflectionSphere = new ReflectionSphere(new Vector3(0, 10, 0));
 
             lightsManager = new LightsManager(prepareLights: true);
             basicOcean = new BasicOcean(oceanSize);
@@ -62,6 +66,7 @@ namespace FirstProject
             _ocean = new Ocean(_oceanEffect);
             _ocean.SetScale(100);
             _ocean.Initialize(Content, graphics);
+            _reflectionSphere.Initialize(Content);
 
             base.Initialize();
         }
@@ -109,12 +114,16 @@ namespace FirstProject
                 palm.Draw(_camera);
             }
             _robot.Draw(_camera);
-            _ocean.Draw(_camera);
+            //_ocean.Draw(_camera);
 
 
             graphics.GraphicsDevice.RasterizerState = new RasterizerState() { CullMode = CullMode.CullClockwiseFace };
             skybox.Draw(_camera);
             graphics.GraphicsDevice.RasterizerState = new RasterizerState() { CullMode = CullMode.CullCounterClockwiseFace };
+
+            //graphics.GraphicsDevice.RasterizerState = new RasterizerState() { CullMode = CullMode.CullClockwiseFace };
+            _reflectionSphere.Draw(_camera);
+            //graphics.GraphicsDevice.RasterizerState = new RasterizerState() { CullMode = CullMode.CullCounterClockwiseFace };
             //graphics.GraphicsDevice.RasterizerState = new RasterizerState() { CullMode = CullMode.CullClockwiseFace };
             //ocean.Draw(gameTime, skybox.Texture);
             //graphics.GraphicsDevice.RasterizerState = new RasterizerState() { CullMode = CullMode.CullCounterClockwiseFace };

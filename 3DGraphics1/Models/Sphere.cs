@@ -126,6 +126,10 @@ namespace FirstProject
         public override void Draw(Camera camera) // the camera class contains the View and Projection Matrices
         {
             PrepareEffect(camera);
+            _effect.Parameters["AmbientColor"].SetValue(Color.Green.ToVector4());
+            _effect.Parameters["DiffuseColor"].SetValue(Color.White.ToVector4());
+            _effect.Parameters["AmbientIntensity"].SetValue(0.1f);
+            _effect.Parameters["DiffuseIntensity"].SetValue(15.0f);
             foreach (EffectPass pass in _effect.CurrentTechnique.Passes)
             {
                 pass.Apply();

@@ -10,12 +10,13 @@ namespace FirstProject
 {
     internal abstract class ModelBase
     {
-        protected Model model;
+        protected Model _model;
         protected Effect _effect;
         protected Vector3 _position = new Vector3();
         protected float _scale = 1.0f;
         protected Texture2D _texture;
 
+        protected ModelBase() { }
 
         protected ModelBase(Effect effect)
         {
@@ -32,16 +33,12 @@ namespace FirstProject
             _effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
             Matrix worldInverseTransposeMatrix = Matrix.Transpose(Matrix.Invert(GetWorldMatrix()));
             _effect.Parameters["WorldInverseTranspose"].SetValue(worldInverseTransposeMatrix);
-            _effect.Parameters["AmbientColor"].SetValue(Color.Green.ToVector4());
-            _effect.Parameters["DiffuseColor"].SetValue(Color.White.ToVector4());
-            _effect.Parameters["AmbientIntensity"].SetValue(0.1f);
-            _effect.Parameters["DiffuseIntensity"].SetValue(15.0f);
         }
 
         public virtual void Draw(Camera camera)
         {
             PrepareEffect(camera);
-            foreach (var mesh in model.Meshes)
+            foreach (var mesh in _model.Meshes)
             {
                 foreach (ModelMeshPart part in mesh.MeshParts)
                 {

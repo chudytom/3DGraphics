@@ -20,7 +20,7 @@ namespace FirstProject
 
         public void Initialize(ContentManager contentManager)
         {
-            model = contentManager.Load<Model>("Models/robot");
+            _model = contentManager.Load<Model>("Models/robot");
         }
 
         public void Update(GameTime gameTime)
@@ -35,8 +35,12 @@ namespace FirstProject
 
         protected override void PrepareEffect(Camera camera)
         {
-            _effect.Parameters["ModelTexture"].SetValue(_texture);
             base.PrepareEffect(camera);
+            _effect.Parameters["ModelTexture"].SetValue(_texture);
+            _effect.Parameters["AmbientColor"].SetValue(Color.Green.ToVector4());
+            _effect.Parameters["DiffuseColor"].SetValue(Color.White.ToVector4());
+            _effect.Parameters["AmbientIntensity"].SetValue(0.1f);
+            _effect.Parameters["DiffuseIntensity"].SetValue(15.0f);
         }
 
         protected override Matrix GetWorldMatrix()

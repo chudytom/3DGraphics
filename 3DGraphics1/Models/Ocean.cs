@@ -18,7 +18,7 @@ namespace FirstProject
 
         public void Initialize(ContentManager contentManager, GraphicsDeviceManager graphics)
         {
-            model = contentManager.Load<Model>("Models/Ocean");
+            _model = contentManager.Load<Model>("Models/Ocean");
 
             for (int i = 0; i < 4; i++)
             {

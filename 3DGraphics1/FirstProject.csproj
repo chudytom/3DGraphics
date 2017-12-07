@@ -50,6 +50,7 @@
     <Compile Include="Models\Ocean.cs" />
     <Compile Include="Models\PrimitiveOcean.cs" />
     <Compile Include="Models\Palm.cs" />
+    <Compile Include="Models\ReflectionSphere.cs" />
     <Compile Include="Models\Skybox.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -94,6 +95,7 @@
     </Content>
     <Content Include="Content\Ocean.jpg" />
     <Content Include="Content\Ocean2.png" />
+    <Content Include="Content\Shaders\Reflection.fx" />
     <Content Include="Content\Shaders\OceanShader.fx" />
     <Content Include="Content\Shaders\SkyboxShader.fx" />
     <Content Include="Content\Shaders\IslandShader.fx" />
@@ -115,6 +117,7 @@
     <None Include="Content\Models\Ocean.obj" />
     <None Include="Content\Models\robot.xnb" />
     <None Include="Content\Models\robottexture_0.xnb" />
+    <None Include="Content\Models\sphere.fbx" />
     <None Include="Content\Skyboxes\cube.fbx" />
     <None Include="Content\spaceship.xnb" />
   </ItemGroup>
