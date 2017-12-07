@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace FirstProject
 {
@@ -36,9 +37,17 @@ namespace FirstProject
 
         protected override void PrepareEffect(Camera camera)
         {
+            KeyboardState state = Keyboard.GetState();
+            var pressedKeys = state.GetPressedKeys();
             base.PrepareEffect(camera);
-            _effect.Parameters["ModelTexture1"].SetValue(_oceanTextures[0]);
-            _effect.Parameters["ModelTexture2"].SetValue(_oceanTextures[2]);
+            if(pressedKeys.Length > 0 && state.IsKeyDown(Keys.P))
+            {
+
+                _effect.Parameters["ModelTexture2"].SetValue(_oceanTextures[0]);
+            }
+            else
+                _effect.Parameters["ModelTexture2"].SetValue(_oceanTextures[1]);
+            _effect.Parameters["ModelTexture1"].SetValue(_oceanTextures[2]);
             _effect.Parameters["TextureLerp"].SetValue(0.5f);
             _effect.Parameters["Time"].SetValue(_time * _oceanMoveSpeed);
         }

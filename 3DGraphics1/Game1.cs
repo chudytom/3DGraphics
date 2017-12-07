@@ -114,15 +114,15 @@ namespace FirstProject
                 palm.Draw(_camera);
             }
             _robot.Draw(_camera);
-            //_ocean.Draw(_camera);
+            _ocean.Draw(_camera);
 
 
             graphics.GraphicsDevice.RasterizerState = new RasterizerState() { CullMode = CullMode.CullClockwiseFace };
             skybox.Draw(_camera);
             graphics.GraphicsDevice.RasterizerState = new RasterizerState() { CullMode = CullMode.CullCounterClockwiseFace };
+            _reflectionSphere.Draw(_camera);
 
             //graphics.GraphicsDevice.RasterizerState = new RasterizerState() { CullMode = CullMode.CullClockwiseFace };
-            _reflectionSphere.Draw(_camera);
             //graphics.GraphicsDevice.RasterizerState = new RasterizerState() { CullMode = CullMode.CullCounterClockwiseFace };
             //graphics.GraphicsDevice.RasterizerState = new RasterizerState() { CullMode = CullMode.CullClockwiseFace };
             //ocean.Draw(gameTime, skybox.Texture);

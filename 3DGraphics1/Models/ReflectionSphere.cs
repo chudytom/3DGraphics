@@ -19,6 +19,7 @@ namespace FirstProject
         public ReflectionSphere(Vector3 modelPosition, Effect effect) : base(effect)
         {
             _position = modelPosition;
+            SetScale(5);
         }
         public void Initialize(ContentManager content)
         {
