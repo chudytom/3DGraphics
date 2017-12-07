@@ -16,7 +16,7 @@ namespace FirstProject
         public GraphicsDevice Graphics => graphicsDevice;
         GraphicsDevice graphicsDevice;
 
-        Vector3 cameraPosition = new Vector3(0, -10, 20);
+        Vector3 cameraPosition = new Vector3(0, 10, 20);
         public Vector3 Position => cameraPosition;
         Vector3 frontVector = new Vector3(0, -0.5f, 1);
         Vector3 upVector = new Vector3(0, 1, 0.5f);

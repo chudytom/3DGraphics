@@ -117,9 +117,14 @@ namespace FirstProject
             this.texture = texture;
         }
 
+        //protected override void PrepareEffect(Camera camera)
+        //{
+        //    _effect.Parameters["ModelTexture"].SetValue(texture);
+        //    base.PrepareEffect(camera);
+        //}
+
         public override void Draw(Camera camera) // the camera class contains the View and Projection Matrices
         {
-            //graphicd.RasterizerState = new RasterizerState() { FillMode = FillMode.Solid }; // Wireframe as in the picture
             PrepareEffect(camera);
             foreach (EffectPass pass in _effect.CurrentTechnique.Passes)
             {
@@ -130,7 +135,7 @@ namespace FirstProject
 
         protected override Matrix GetWorldMatrix()
         {
-            Matrix combinedMatrix = Matrix.CreateScale(1.0f) * Matrix.CreateRotationX(MathHelper.PiOver2) * Matrix.CreateTranslation(spherePosition);
+            Matrix combinedMatrix = Matrix.CreateScale(1.0f) * Matrix.CreateRotationX(0) * Matrix.CreateTranslation(spherePosition);
             return combinedMatrix;
         }
 

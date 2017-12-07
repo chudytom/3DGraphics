@@ -11,22 +11,27 @@ namespace FirstProject
 {
     internal class Palm : ModelBase
     {
-        Vector3 modelPosition;
-        public Color Color { get; set; }
-        List<DirLight> light = new List<DirLight>();
         public Palm(Vector3 modelPosition, Effect effect) : base(effect)
         {
-            this.modelPosition = modelPosition;
+            _position = modelPosition;
         }
         public void Initialize(ContentManager contentManager)
         {
             model = contentManager.Load<Model>("Palm1");
         }
 
+        protected override void PrepareEffect(Camera camera)
+        {
+            _effect.Parameters["ModelTexture"].SetValue(_texture);
+            base.PrepareEffect(camera);
+        }
+
         protected override Matrix GetWorldMatrix()
         {
-            Matrix combinedMatrix = Matrix.CreateScale(0.3f) * Matrix.CreateRotationX(MathHelper.PiOver2) * Matrix.CreateTranslation(modelPosition);
-            return combinedMatrix;
+            SetScale(0.3f);
+            return base.GetWorldMatrix();
+            //Matrix worldMatrix = Matrix.CreateScale(0.3f) * Matrix.CreateRotationX(0) * Matrix.CreateTranslation(_position);
+            //return worldMatrix;
         }
     }
 }

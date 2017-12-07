@@ -10,22 +10,27 @@ namespace FirstProject
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
-        BasicEffect effect;
-        Texture2D chessBoardTexture;
+        private Texture2D _chessBoardTexture;
+        Texture2D _oceanTexture1;
         Vector3 cameraPosition = new Vector3(2, 30, 30);
-        Model robotModel;
         Vector3 robotModelPosition;
-        Camera camera;
-        BasicOcean ocean;
-        Sphere sphere;
-        List<Palm> palms = new List<Palm>();
+        Camera _camera;
+        BasicOcean basicOcean;
+        private Sphere sphere;
+        private List<Palm> palms = new List<Palm>();
         float palmPositionAngle = 10;
         float sphereRadius = 5;
         float oceanSize = 140.0f;
-        Robot robot;
-        LightsManager lightsManager;
-        Effect _effect;
+        private Robot robot;
+        private LightsManager lightsManager;
+        private Effect _specularEffect;
+        private Effect _textureEffect;
+        private Effect _oceanEffect;
         private Skybox skybox;
+        private PrimitiveOcean _primitiveOcean;
+        private Ocean _ocean;
+        private Texture2D _oceanTexture2;
+        private Texture2D _oceanTexture3;
 
         public Game1()
         {
@@ -35,66 +40,88 @@ namespace FirstProject
 
         protected override void Initialize()
         {
-            _effect = Content.Load<Effect>("Shaders/Specular");
-            effect = new BasicEffect(graphics.GraphicsDevice);
-            camera = new Camera(graphics.GraphicsDevice);
+            _specularEffect = Content.Load<Effect>("Shaders/Specular");
+            _textureEffect = Content.Load<Effect>("Shaders/Texture");
+            _oceanEffect = Content.Load<Effect>("Shaders/NewOceanShader");
+            _camera = new Camera(graphics.GraphicsDevice);
             skybox = new Skybox(Content);
+            _primitiveOcean = new PrimitiveOcean(graphics.GraphicsDevice, _camera, Content);
 
             lightsManager = new LightsManager(prepareLights: true);
-            ocean = new BasicOcean(oceanSize);
-            sphere = new Sphere(GraphicsDevice, sphereRadius, latitudes: 30, longitudes: 30, color: Color.Red, effect: _effect);
+            basicOcean = new BasicOcean(oceanSize);
+            sphere = new Sphere(GraphicsDevice, sphereRadius, latitudes: 30, longitudes: 30, color: Color.Red, effect: _specularEffect);
             float palmZTranslation = (float)(sphereRadius * Math.Cos(MathHelper.ToRadians(palmPositionAngle)));
             float palmSideTranslation = (float)(sphereRadius * Math.Sin(MathHelper.ToRadians(palmPositionAngle)));
-            palms.Add(new Palm(new Vector3(palmSideTranslation, 0, palmZTranslation), _effect) { Color = Color.Green });
-            palms.Add(new Palm(new Vector3(-palmSideTranslation, 0, palmZTranslation), _effect) { Color = Color.Red });
+            palms.Add(new Palm(new Vector3(0 , palmZTranslation, palmSideTranslation), _textureEffect));
+            palms.Add(new Palm(new Vector3(0, palmZTranslation, -palmSideTranslation), _textureEffect));
             foreach (var palm in palms)
             {
                 palm.Initialize(Content);
             }
-            robot = new Robot(_effect);
+            robot = new Robot(_textureEffect);
             robot.Initialize(Content);
+            _ocean = new Ocean(_oceanEffect);
+            _ocean.SetScale(20);
+            _ocean.Initialize(Content);
+
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            robotModel = Content.Load<Model>("robot");
 
             using (var stream = TitleContainer.OpenStream("Content/chessboard.png"))
             {
-                chessBoardTexture = Texture2D.FromStream(this.GraphicsDevice, stream);
+                _chessBoardTexture = Texture2D.FromStream(this.GraphicsDevice, stream);
             }
             using (var stream = TitleContainer.OpenStream("Content/Ocean.jpg"))
             {
-                ocean.SetTexture(Texture2D.FromStream(this.GraphicsDevice, stream));
+                _oceanTexture1 = Texture2D.FromStream(this.GraphicsDevice, stream);
+            }
+            using (var stream = TitleContainer.OpenStream("Content/Images/sea1.jpg"))
+            {
+                _oceanTexture2 = Texture2D.FromStream(this.GraphicsDevice, stream);
+            }
+            using (var stream = TitleContainer.OpenStream("Content/Images/redSea2.jpg"))
+            {
+                _oceanTexture3 = Texture2D.FromStream(this.GraphicsDevice, stream);
             }
             robotModelPosition = new Vector3(0, 0, 3);
-            sphere.SetTexture(chessBoardTexture);
+            robot.SetTexture(_chessBoardTexture);
+            _ocean.SetTexture(_oceanTexture2);
+            foreach (var palm in palms)
+            {
+                palm.SetTexture(_oceanTexture1);
+            }
+            sphere.SetTexture(_oceanTexture1);
         }
 
         protected override void Update(GameTime gameTime)
         {
             robot.Update(gameTime);
-            camera.Update(gameTime);
+            _camera.Update(gameTime);
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.LightSkyBlue);
-            //ocean.Draw(camera);
-            sphere.Draw(camera);
+            sphere.Draw(_camera);
             foreach (var palm in palms)
             {
-                palm.Draw(camera);
+                palm.Draw(_camera);
             }
-            robot.Draw(camera);
+            robot.Draw(_camera);
+            _ocean.Draw(_camera);
 
-            base.Draw(gameTime);
-            //graphics.GraphicsDevice.RasterizerState.CullMode = CullMode.CullCounterClockwiseFace;
+
             graphics.GraphicsDevice.RasterizerState = new RasterizerState() { CullMode = CullMode.CullClockwiseFace };
-            skybox.Draw(camera);
+            skybox.Draw(_camera);
             graphics.GraphicsDevice.RasterizerState = new RasterizerState() { CullMode = CullMode.CullCounterClockwiseFace };
+            //graphics.GraphicsDevice.RasterizerState = new RasterizerState() { CullMode = CullMode.CullClockwiseFace };
+            //ocean.Draw(gameTime, skybox.Texture);
+            //graphics.GraphicsDevice.RasterizerState = new RasterizerState() { CullMode = CullMode.CullCounterClockwiseFace };
+            base.Draw(gameTime);
         }
     }
 }

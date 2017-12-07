@@ -46,7 +46,9 @@
     <Compile Include="Game1.cs" />
     <Compile Include="LightsManager.cs" />
     <Compile Include="Models\ModelBase.cs" />
+    <Compile Include="Models\BasicOcean.cs" />
     <Compile Include="Models\Ocean.cs" />
+    <Compile Include="Models\PrimitiveOcean.cs" />
     <Compile Include="Models\Palm.cs" />
     <Compile Include="Models\Skybox.cs" />
     <Compile Include="Program.cs" />
@@ -66,12 +68,33 @@
   <ItemGroup>
     <Content Include="Content\boat.jpg" />
     <Content Include="Content\chessboard.png" />
+    <Content Include="Content\Images\redSea.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Images\redSea2.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Images\sea1.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Images\sea2.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Images\sea3.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Images\sea4.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Ocean.jpg" />
     <Content Include="Content\Ocean2.png" />
+    <Content Include="Content\Shaders\OceanShader.fx" />
     <Content Include="Content\Shaders\SkyboxShader.fx" />
     <Content Include="Content\Shaders\Specular.fx" />
     <Content Include="Content\Shaders\Diffuse.fx" />
     <Content Include="Content\Shaders\Ambient.fx" />
+    <Content Include="Content\Shaders\NewOceanShader.fx" />
+    <Content Include="Content\Shaders\Texture.fx" />
     <Content Include="Content\Skyboxes\Islands.dds" />
     <Content Include="Content\Skyboxes\Skybox.dds" />
     <Content Include="Content\Skyboxes\Sunset.dds" />
@@ -82,8 +105,9 @@
     <None Include="app.manifest" />
     <None Include="Content\enemy_0.xnb" />
     <None Include="Content\grass.xnb" />
-    <None Include="Content\robot.xnb" />
-    <None Include="Content\robottexture_0.xnb" />
+    <None Include="Content\Models\Ocean.obj" />
+    <None Include="Content\Models\robot.xnb" />
+    <None Include="Content\Models\robottexture_0.xnb" />
     <None Include="Content\Skyboxes\cube.fbx" />
     <None Include="Content\spaceship.xnb" />
   </ItemGroup>

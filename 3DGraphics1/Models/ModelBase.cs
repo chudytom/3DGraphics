@@ -12,6 +12,10 @@ namespace FirstProject
     {
         protected Model model;
         protected Effect _effect;
+        protected Vector3 _position = new Vector3();
+        protected float _scale = 1.0f;
+        protected Texture2D _texture;
+
 
         protected ModelBase(Effect effect)
         {
@@ -29,8 +33,9 @@ namespace FirstProject
             Matrix worldInverseTransposeMatrix = Matrix.Transpose(Matrix.Invert(GetWorldMatrix()));
             _effect.Parameters["WorldInverseTranspose"].SetValue(worldInverseTransposeMatrix);
             _effect.Parameters["AmbientColor"].SetValue(Color.Green.ToVector4());
-            _effect.Parameters["AmbientIntensity"].SetValue(0.5f);
-            _effect.Parameters["DiffuseIntensity"].SetValue(0.0f);
+            _effect.Parameters["DiffuseColor"].SetValue(Color.White.ToVector4());
+            _effect.Parameters["AmbientIntensity"].SetValue(0.1f);
+            _effect.Parameters["DiffuseIntensity"].SetValue(3.0f);
         }
 
         public virtual void Draw(Camera camera)
@@ -46,6 +51,25 @@ namespace FirstProject
             }
         }
 
-        protected abstract Matrix GetWorldMatrix();
+        protected virtual Matrix GetWorldMatrix()
+        {
+            return Matrix.CreateScale(_scale) * Matrix.CreateTranslation(_position);
+        }
+
+        public void SetPosition(Vector3 position)
+        {
+            _position = position;
+        }
+
+        public void SetScale(float scale)
+        {
+            _scale = scale;
+        }
+
+
+        public void SetTexture(Texture2D texture)
+        {
+            _texture = texture;
+        }
     }
 }

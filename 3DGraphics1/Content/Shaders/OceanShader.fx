@@ -1,4 +1,13 @@
-﻿float4x4 World;
+﻿#if OPENGL
+#define SV_POSITION POSITION
+#define VS_SHADERMODEL vs_3_0
+#define PS_SHADERMODEL ps_3_0
+#else
+#define VS_SHADERMODEL vs_4_0_level_9_3
+#define PS_SHADERMODEL ps_4_0_level_9_3
+#endif
+
+float4x4 World;
 float4x4 View;
 float4x4 Projection;
 
@@ -13,6 +22,7 @@ float FogEnabled;
 float FogStart;
 float FogEnd;
 float4 FogColor;
+float3 CameraPosition;
 
 textureCUBE cubeTex;
 samplerCUBE CubeTextureSampler = sampler_state
@@ -61,6 +71,7 @@ struct VertexShaderOutput
     float4 Position : POSITION0;
     float2 texCoord : TEXCOORD0;
     float3 worldPos : TEXCOORD1;
+	//float FogFactor;
 };
 
 float ComputeFogFactor(float d)
@@ -78,7 +89,7 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
 
     output.texCoord = input.texCoord * 100;
     output.worldPos = worldPosition.xyz;
-    output.FogFactor = ComputeFogFactor(length(CameraPosition - worldPosition));
+    //output.FogFactor = ComputeFogFactor(length(CameraPosition - worldPosition));
     return output;
 }
 
@@ -105,7 +116,7 @@ technique Ocean
 {
     pass Pass1
     {
-        VertexShader = compile vs_4_0 VertexShaderFunction();
-        PixelShader = compile ps_4_0 PixelShaderFunction();
+        VertexShader = compile VS_SHADERMODEL VertexShaderFunction();
+        PixelShader = compile PS_SHADERMODEL PixelShaderFunction();
     }
 }
