@@ -15,9 +15,14 @@ namespace FirstProject
         {
             _position = modelPosition;
         }
-        public void Initialize(ContentManager contentManager)
+        public void Initialize(ContentManager contentManager, GraphicsDeviceManager graphics)
         {
             model = contentManager.Load<Model>("Palm1");
+
+            using (var stream = TitleContainer.OpenStream("Content/Images/palmTexture1.jpg"))
+            {
+                _texture = Texture2D.FromStream(graphics.GraphicsDevice, stream);
+            }
         }
 
         protected override void PrepareEffect(Camera camera)

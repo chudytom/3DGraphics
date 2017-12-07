@@ -112,10 +112,10 @@ namespace FirstProject
             }
         }
 
-        public void SetTexture(Texture2D texture)
-        {
-            this.texture = texture;
-        }
+        //public void SetTexture(Texture2D texture)
+        //{
+        //    this.texture = texture;
+        //}
 
         //protected override void PrepareEffect(Camera camera)
         //{

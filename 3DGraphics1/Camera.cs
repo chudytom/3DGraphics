@@ -52,7 +52,7 @@ namespace FirstProject
             {
                 float fieldOfView = Microsoft.Xna.Framework.MathHelper.PiOver4;
                 float nearClipPlane = 1;
-                float farClipPlane = 200;
+                float farClipPlane = 400;
                 float aspectRatio = graphicsDevice.Viewport.Width / (float)graphicsDevice.Viewport.Height;
 
                 return Matrix.CreatePerspectiveFieldOfView(

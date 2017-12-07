@@ -35,7 +35,7 @@ namespace FirstProject
             _effect.Parameters["AmbientColor"].SetValue(Color.Green.ToVector4());
             _effect.Parameters["DiffuseColor"].SetValue(Color.White.ToVector4());
             _effect.Parameters["AmbientIntensity"].SetValue(0.1f);
-            _effect.Parameters["DiffuseIntensity"].SetValue(3.0f);
+            _effect.Parameters["DiffuseIntensity"].SetValue(15.0f);
         }
 
         public virtual void Draw(Camera camera)

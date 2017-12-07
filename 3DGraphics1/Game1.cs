@@ -21,7 +21,7 @@ namespace FirstProject
         float palmPositionAngle = 10;
         float sphereRadius = 5;
         float oceanSize = 140.0f;
-        private Robot robot;
+        private Robot _robot;
         private LightsManager lightsManager;
         private Effect _specularEffect;
         private Effect _textureEffect;
@@ -30,7 +30,6 @@ namespace FirstProject
         private PrimitiveOcean _primitiveOcean;
         private Ocean _ocean;
         private Texture2D _oceanTexture2;
-        private Texture2D _oceanTexture3;
 
         public Game1()
         {
@@ -56,13 +55,13 @@ namespace FirstProject
             palms.Add(new Palm(new Vector3(0, palmZTranslation, -palmSideTranslation), _textureEffect));
             foreach (var palm in palms)
             {
-                palm.Initialize(Content);
+                palm.Initialize(Content, graphics);
             }
-            robot = new Robot(_textureEffect);
-            robot.Initialize(Content);
+            _robot = new Robot(_textureEffect);
+            _robot.Initialize(Content);
             _ocean = new Ocean(_oceanEffect);
-            _ocean.SetScale(20);
-            _ocean.Initialize(Content);
+            _ocean.SetScale(100);
+            _ocean.Initialize(Content, graphics);
 
             base.Initialize();
         }
@@ -82,23 +81,21 @@ namespace FirstProject
             {
                 _oceanTexture2 = Texture2D.FromStream(this.GraphicsDevice, stream);
             }
-            using (var stream = TitleContainer.OpenStream("Content/Images/redSea2.jpg"))
-            {
-                _oceanTexture3 = Texture2D.FromStream(this.GraphicsDevice, stream);
-            }
+    
             robotModelPosition = new Vector3(0, 0, 3);
-            robot.SetTexture(_chessBoardTexture);
+            _robot.SetTexture(_chessBoardTexture);
             _ocean.SetTexture(_oceanTexture2);
-            foreach (var palm in palms)
-            {
-                palm.SetTexture(_oceanTexture1);
-            }
+            //foreach (var palm in palms)
+            //{
+            //    palm.SetTexture(_oceanTexture1);
+            //}
             sphere.SetTexture(_oceanTexture1);
         }
 
         protected override void Update(GameTime gameTime)
         {
-            robot.Update(gameTime);
+            _robot.Update(gameTime);
+            _ocean.Update(gameTime);
             _camera.Update(gameTime);
             base.Update(gameTime);
         }
@@ -111,7 +108,7 @@ namespace FirstProject
             {
                 palm.Draw(_camera);
             }
-            robot.Draw(_camera);
+            _robot.Draw(_camera);
             _ocean.Draw(_camera);
 
 

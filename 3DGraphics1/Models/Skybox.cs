@@ -11,7 +11,7 @@ namespace FirstProject
     {
         private readonly Model _skyBox;
         private Effect _skyBoxEffect;
-        private const float Size = 50f;
+        private const float Size = 200f;
         private readonly TextureCube _skyBoxTexture;
         public TextureCube Texture => _skyBoxTexture;
 

@@ -167,3 +167,9 @@
 /processorParam:DebugMode=Auto
 /build:Shaders/NewOceanShader.fx
 
+#begin Shaders/IslandShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Shaders/IslandShader.fx
+
