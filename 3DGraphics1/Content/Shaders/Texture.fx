@@ -80,7 +80,9 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 	float4 textureColor = tex2D(textureSampler, input.TextureCoordinate);
 	textureColor.a = 1;
 
-    return saturate(textureColor  * input.Color + AmbientColor * AmbientIntensity + specular);
+	float4 color = saturate(textureColor  * input.Color + AmbientColor * AmbientIntensity + specular);
+	color.a = 1;
+	return color;
 }
 
 technique Specular

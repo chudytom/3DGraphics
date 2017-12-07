@@ -46,12 +46,15 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
     float4 VertexPosition = mul(input.Position, World);
     output.TextureCoordinate = VertexPosition - CameraPosition;
 
+
     return output;
 }
 
 float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 {
-    return texCUBE(SkyBoxSampler, normalize(input.TextureCoordinate));
+	float4 color = texCUBE(SkyBoxSampler, normalize(input.TextureCoordinate));
+	color.a = 1;
+    return color;
 }
 
 technique Skybox

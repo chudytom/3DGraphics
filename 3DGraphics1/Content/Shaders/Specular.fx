@@ -66,8 +66,9 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 
     float dotProduct = dot(r, v);
     float4 specular = SpecularIntensity * SpecularColor * max(pow(dotProduct, Shininess), 0);
-
-    return saturate( input.Color + AmbientColor * AmbientIntensity + specular);
+	float4 color = saturate(input.Color + AmbientColor * AmbientIntensity + specular);
+	color.a = 1;
+	return color;
 }
 
 technique Specular

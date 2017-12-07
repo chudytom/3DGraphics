@@ -91,17 +91,23 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 	float4 texture1 = tex2D(textureSampler1, input.TextureCoordinate + float2(0, 0));
 	float4 texture2 = tex2D(textureSampler2, input.TextureCoordinate + float2(Time, 0));
 	float4 textureColor = (TextureLerp * texture1) + ((1 - TextureLerp) * texture2);
-	textureColor.a = 1;
+	textureColor.a = 0.3;
 	//float4 textureColor = tex2D(textureSampler1, input.TextureCoordinate);
-
-    return saturate(textureColor * 5 * input.Color + AmbientColor * AmbientIntensity + specular);
+	float4 color = saturate(textureColor * 5 * input.Color + AmbientColor * AmbientIntensity + specular);
+	//color.a = 1;
+	return color;
 }
 
 technique Specular
 {
 	pass Pass1
 	{
+		AlphaBlendEnable = TRUE;
+		DestBlend = INVSRCALPHA;
+		SrcBlend = SRCALPHA;
 		VertexShader = compile VS_SHADERMODEL VertexShaderFunction();
 		PixelShader = compile PS_SHADERMODEL PixelShaderFunction();
+		//AlphaBlendEnable = FALSE;
+
 	}
 }
